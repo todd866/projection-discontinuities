@@ -28,6 +28,13 @@ python demo_scrna.py --dataset pbmc3k  # Real data (requires scanpy)
 python demo_lorenz.py          # Shadow box demonstration
 ```
 
+### Reproduce Paper Figures
+
+```bash
+python generate_figures.py     # Regenerates all figures into ./figures/
+pytest toolkit/tests/          # Run tests (optional)
+```
+
 ---
 
 ## What This Is
@@ -119,6 +126,7 @@ Binary hypothesis testing (Popperian falsification) works in some regimes but fa
 
 ## Citation
 
+**Paper 1 (Theory):**
 ```bibtex
 @article{todd2025limits,
   title={The limits of falsifiability},
@@ -129,6 +137,18 @@ Binary hypothesis testing (Popperian falsification) works in some regimes but fa
   year={2025},
   publisher={Elsevier},
   doi={10.1016/j.biosystems.2025.105608}
+}
+```
+
+**Paper 2 + Toolkit (This Repository):**
+```bibtex
+@software{todd2025falsifiability,
+  title={Falsifiability Toolkit: Quantifying Topological Aliasing},
+  author={Todd, Ian},
+  year={2025},
+  publisher={Zenodo},
+  doi={10.5281/zenodo.17791874},
+  url={https://github.com/todd866/limits-of-falsifiability}
 }
 ```
 
