@@ -36,8 +36,8 @@ This repository contains:
 
 | Component | Description |
 |-----------|-------------|
-| **Paper 1** | "The Limits of Falsifiability" — BioSystems 258, Oct 2025 (published) |
-| **Paper 2** | "The Geometry of Biological Shadows" — computational companion (in prep) |
+| **Paper 1** | "The Limits of Falsifiability" — BioSystems 258, 105608 (published) |
+| **Paper 2** | "The Geometry of Biological Shadows" — computational companion (ready for submission) |
 | **Toolkit** | Clean Python library for measuring topological aliasing |
 
 **The core finding:** When you project scRNA-seq data (D_sys ≈ 10-40) into t-SNE/UMAP (D_obs = 2), approximately **75.5% of apparent neighbors are wrong**. The clusters you see are partially hallucinated. This was validated across 4 standard datasets (n = 90,300 cells total).
@@ -58,8 +58,9 @@ limits-of-falsifiability/
 │   └── README.md               # API documentation
 │
 ├── biosystems_2025_published.pdf   # Paper 1 (published)
-├── paper2_shadow_geometry.pdf      # Paper 2 (in prep)
+├── paper2_shadow_geometry.pdf      # Paper 2 (ready)
 ├── paper2_shadow_geometry.tex      # Paper 2 source
+├── LICENSE                         # MIT License
 │
 ├── figures/                    # Generated figures
 ├── archive_sims/               # Original simulation scripts (historical)

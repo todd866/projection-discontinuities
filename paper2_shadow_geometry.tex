@@ -10,6 +10,7 @@
 \usepackage{hyperref}
 \usepackage{booktabs}
 \usepackage{graphicx}
+\usepackage{float}
 \usepackage{xcolor}
 \doublespacing
 
@@ -185,10 +186,10 @@ We test dimensions $n \in \{2, 3, \ldots, 15\}$ with fixed sample size $N = 1000
 
 Figure~\ref{fig:shadow_box} shows the Lorenz attractor and its 2D projection.
 
-\begin{figure}[h]
+\begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{figures/fig_shadow_box.pdf}
-\caption{\textbf{The Shadow Box.} (A) Full 3D Lorenz attractor colored by true dynamical state (red = left lobe, teal = right lobe). (B) 2D projection onto $(y, z)$ with binary cut $z = 25$. (C) Aliased points (black X) where shadow classification contradicts system state. (D) Conceptual summary.}
+\caption{\textbf{The Shadow Box---Topological aliasing when $D_{\text{sys}} > D_{\text{obs}}$.} (A) Full 3D Lorenz attractor ($D_{\text{sys}} = 3$) colored by true dynamical state. (B) 2D projection ($D_{\text{obs}} = 2$) with binary cut at $z = 25$. (C) Aliasing revealed: 47\% of points misclassified, with 199 apparent ``teleportations'' where the shadow jumps across the cut while the system flows continuously. See \texttt{generate\_figures.py}.}
 \label{fig:shadow_box}
 \end{figure}
 
@@ -206,10 +207,10 @@ The binary cut that appears ``clean'' in the shadow is fundamentally wrong about
 
 The Lorenz demonstration establishes aliasing in a minimal model. But does this phenomenon occur in real biological data? Figure~\ref{fig:scrna} presents results from four standard scRNA-seq datasets.
 
-\begin{figure}[h]
+\begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{figures/fig_multi_dataset_aliasing.pdf}
-\caption{\textbf{Topological aliasing across single-cell datasets.} (A) Comparison of intrinsic dimensionality ($D_{\text{sys}}$) and aliasing rate across four datasets. (B) The ``hairball of truth'': lines connect points that are neighbors in t-SNE but were NOT neighbors in high-dimensional space. The density of lines reveals the extent of topological distortion.}
+\includegraphics[width=\textwidth]{figures/fig_multi_dataset.pdf}
+\caption{\textbf{Multi-dataset evidence---High-dimensional systems systematically alias under projection.} (A) Schematic ``hairball of truth'': red lines connect false neighbors (2D neighbors that were not neighbors in high-D). (B) Aliasing rates across four scRNA-seq benchmarks, sorted by magnitude; all exceed random expectation (50\%), mean = 75.5\%. (C) $D_{\text{sys}}$ (participation ratio) vs aliasing. (D) Summary. See \texttt{toolkit/demo\_scrna.py}.}
 \label{fig:scrna}
 \end{figure}
 
@@ -244,7 +245,7 @@ This result has immediate implications for standard bioinformatics practice. Whe
 
 Figure~\ref{fig:sr} shows the signal-to-noise ratio as a function of population size.
 
-\begin{figure}[h]
+\begin{figure}[H]
 \centering
 \includegraphics[width=0.8\textwidth]{figures/fig_sub_landauer_sr.pdf}
 \caption{\textbf{Sub-Landauer signal detection via stochastic resonance.} (A) The sub-threshold signal (amplitude 0.3, threshold 1.0). (B) Single neuron vs population average response. (C) SNR scales as $\sqrt{N}$ (dashed line = theory).}
@@ -264,10 +265,10 @@ This demonstrates that \textbf{falsifiability is an emergent property of the ens
 
 Figure~\ref{fig:regime} maps the boundary between effective and incoherent binary testing.
 
-\begin{figure}[h]
+\begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{figures/fig_scale_dependent.pdf}
-\caption{\textbf{Scale-dependent falsifiability.} (A) Binary test power across (dimension $\times$ signal strength). (B) Multivariate test power. (C) Advantage of multivariate methods (purple = multivariate succeeds where binary fails). (D) Regime diagram: ``Popper Regime'' (low-$n$, high signal---classical biology) vs ``Ensemble Regime'' (high-$n$, low signal---systems biology, neuroscience, ecology).}
+\caption{\textbf{Scale-dependent falsifiability.} (A) Binary test power across dimension $\times$ signal strength; red indicates low power. (B) Multivariate test power; maintains efficacy at higher dimensions. (C) The falsifiability regime diagram: ``Popper Regime'' (low dimensionality, high signal) where binary tests work vs ``Ensemble Regime'' (high dimensionality, low signal) where only multivariate methods succeed. Arrow indicates the transition as systems become more complex.}
 \label{fig:regime}
 \end{figure}
 
@@ -283,10 +284,10 @@ Key findings:
 
 Figure~\ref{fig:nonergodic} demonstrates why time averaging fails when hidden dimensions carry memory.
 
-\begin{figure}[h]
+\begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{sims/figures/fig_nonergodic_memory.pdf}
-\caption{\textbf{Non-ergodic memory breaks time averaging.} (A--B) Raw trajectories for ergodic vs non-ergodic systems. (C--D) Cumulative time averages: ergodic trajectories converge to a common value; non-ergodic trajectories diverge based on hidden state $H$. (E) Distribution of final time averages: ergodic = tight cluster; non-ergodic = bimodal. (F) Conceptual summary.}
+\includegraphics[width=\textwidth]{figures/fig_nonergodic_memory.pdf}
+\caption{\textbf{Non-ergodic memory---Time averaging fails when hidden states store history.} (A--B) Raw trajectories: ergodic systems explore the same region; non-ergodic systems diverge by hidden state $H$. (C--D) Cumulative time averages: ergodic converge to ensemble mean; non-ergodic converge to $H$-dependent values. The ensemble mean (0.5) is reached by no individual trajectory. (E) Final distribution: ergodic = tight; non-ergodic = bimodal. (F) Schematic. See \texttt{generate\_figures.py}.}
 \label{fig:nonergodic}
 \end{figure}
 
@@ -304,10 +305,10 @@ This is why ``just measure longer'' does not help when the system remembers in d
 
 Figure~\ref{fig:coverage} demonstrates why ensemble averaging becomes impractical as dimensionality increases.
 
-\begin{figure}[h]
+\begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{sims/figures/fig_sample_complexity.pdf}
-\caption{\textbf{The curse of dimensionality for coverage.} (A) Coverage vs dimension at fixed $N = 1000$ samples. (B) Total cells ($3^n$) vs dimension---the exponential wall. (C) Coverage curves for different dimensions. (D) Conceptual summary: ``This is not `we need more data'---this is `the required data doesn't exist.'\,''}
+\includegraphics[width=\textwidth]{figures/fig_sample_complexity.pdf}
+\caption{\textbf{The curse of dimensionality for coverage.} (A) Coverage fraction collapses exponentially with dimension at fixed $N = 1000$ samples; dashed line marks 1\% coverage. (B) State space size explodes as $3^n$; shaded region shows where space exceeds sample size. (C) Coverage curves by dimension: even $10^4$ samples achieve negligible coverage at $n = 10$.}
 \label{fig:coverage}
 \end{figure}
 
@@ -329,6 +330,8 @@ The shadow box demonstration reveals that the failure of binary falsification in
 The 199 topological violations are particularly striking. A falsificationist observing only the shadow would see the system ``teleport'' across the binary cut hundreds of times---apparent discontinuities that invite causal explanations (``something switched!'') but are entirely artifacts of projection.
 
 This has direct implications for biology. When a cell appears to ``decide'' between fates, when a neural circuit appears to ``switch'' between states, when an ecosystem appears to ``flip'' between regimes---these discontinuities in the observation may not exist in the underlying high-dimensional dynamics. The system may be flowing smoothly through dimensions we cannot see.
+
+This work provides a computational operationalization of the ``internal measurement'' problem discussed extensively in this journal \cite{igamberdiev2021, louie2020}. While prior work established the epistemological limits of reductionism through relational biology and the modeling relation, the \texttt{falsifiability} toolkit allows us to \textit{quantify} the measurement gap in specific datasets. We show that the ``computational irreducibility'' described by Azadi \cite{azadi2025} manifests empirically as a topological aliasing rate exceeding 75\% in standard transcriptomic data. The aliasing rate is, in effect, a measure of how much causal structure is lost when we attempt to reduce the system ($D_{\text{sys}} \to D_{\text{obs}}$).
 
 \subsection{The Ensemble as the Appropriate Observable}
 
@@ -426,6 +429,15 @@ Donoho, D.L. (2000). High-dimensional data analysis: The curses and blessings of
 
 \bibitem{gorban2018}
 Gorban, A.N., Tyukin, I.Y. (2018). Blessing of dimensionality: mathematical foundations of the statistical physics of data. \textit{Philosophical Transactions of the Royal Society A}, 376(2118), 20170237.
+
+\bibitem{azadi2025}
+Azadi, S. (2025). Computational irreducibility as the foundation of agency. \textit{BioSystems}, 256, 105391.
+
+\bibitem{louie2020}
+Louie, A.H. (2020). Relational biology and Church's thesis. \textit{BioSystems}, 197, 104179.
+
+\bibitem{igamberdiev2021}
+Igamberdiev, A.U., Brenner, J.E. (2021). Mathematics in biological reality: The emergence of natural computation in living systems. \textit{BioSystems}, 204, 104395.
 
 \end{thebibliography}
 
