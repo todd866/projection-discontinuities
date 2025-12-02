@@ -49,7 +49,7 @@ The central insight is \textbf{ontological}, not merely statistical. We distingu
 \toprule
 \textbf{Concept} & \textbf{Definition} & \textbf{Example} \\
 \midrule
-$D_{\text{sys}}$ & The intrinsic degrees of freedom of the dynamical system---the dimension of the manifold the system actually occupies in phase space & Neural attractor dimension \\
+$D_{\text{sys}}$ & The intrinsic degrees of freedom of the dynamical system---the dimension of the manifold the system actually occupies in phase space (e.g., correlation dimension, participation ratio) & Neural attractor dimension \\
 \addlinespace
 $D_{\text{obs}}$ & The number of coordinates we record---sensors, channels, features & Number of electrodes \\
 \bottomrule
@@ -64,7 +64,7 @@ We call this phenomenon \textbf{topological aliasing}---the observation space co
 
 \subsection{Contributions}
 
-This paper makes three contributions:
+This paper makes four contributions:
 
 \begin{enumerate}
     \item \textbf{Topological Aliasing Metric}: Using the Lorenz attractor as a minimal model, we quantify the rate at which dynamical states are misclassified under projection and the number of false discontinuities introduced.
@@ -72,6 +72,8 @@ This paper makes three contributions:
     \item \textbf{Stochastic Resonance Scaling}: We verify the $\text{SNR} \propto \sqrt{N}$ scaling predicted in \cite{todd2025limits}, showing that sub-Landauer patterns become detectable only at the ensemble level.
 
     \item \textbf{Falsifiability Regime Diagram}: We map the boundary in (dimensionality $\times$ signal strength) space where binary hypothesis testing transitions from effective to incoherent.
+
+    \item \textbf{The Inference Trilemma}: We formalize the structural blocks preventing classical inference---non-ergodicity (blocking time averaging), dimensional explosion (blocking ensemble averaging), and thermodynamic fragility (blocking direct measurement)---and provide simulations demonstrating each failure mode (\S4.2).
 \end{enumerate}
 
 \section{Methods}
@@ -127,6 +129,24 @@ For each (dimension $n$, signal strength $s$) pair, we compute:
     \item \textbf{Multivariate test power}: Hotelling's $T^2$ statistic
 \end{itemize}
 Power is estimated as the fraction of 50 trials where the null hypothesis is rejected at $\alpha = 0.05$.
+
+\subsection{Non-Ergodic Memory}
+
+To demonstrate why time averaging fails when hidden dimensions carry memory, we compare two dynamical systems:
+
+\textbf{Ergodic system}: A mean-reverting random walk $x_{t+1} = 0.98 x_t + 0.02 \cdot 0.5 + \epsilon_t$ where $\epsilon_t \sim \mathcal{N}(0, 0.03^2)$. All trajectories explore the same region of state space, and time averages converge to the ensemble mean regardless of initial condition.
+
+\textbf{Non-ergodic system}: The same dynamics, but with a \emph{hidden state} $H \in \{0, 1\}$ set at initialization that determines which attractor the visible state is drawn toward: $x_{t+1} = 0.98 x_t + 0.02 \cdot a_H + \epsilon_t$, where $a_0 = 0.25$ and $a_1 = 0.75$.
+
+An observer seeing only $x$ cannot determine $H$ directly. Their time average converges---but to which value depends on the hidden state they cannot observe. The ensemble mean (0.5) is achieved by \emph{no individual trajectory}.
+
+\subsection{Sample Complexity and Coverage}
+
+To demonstrate why ensemble averaging becomes impractical in high dimensions, we measure the \emph{coverage} of a $n$-dimensional state space by $N$ samples.
+
+We discretize each dimension into $k = 3$ bins, giving $3^n$ total cells. Coverage is the fraction of cells containing at least one sample. This is deliberately generous---coarser binning than most biological applications would require.
+
+We test dimensions $n \in \{2, 3, \ldots, 15\}$ with fixed sample size $N = 1000$. The curse of dimensionality predicts coverage $\to 0$ as $n$ increases, since $3^n$ grows exponentially while $N$ remains constant.
 
 \section{Results}
 
@@ -190,6 +210,47 @@ Key findings:
     \item The ``Ensemble regime'' (where only multivariate methods work) dominates as dimensionality increases
 \end{itemize}
 
+\subsection{Non-Ergodic Time Averages}
+
+Figure~\ref{fig:nonergodic} demonstrates why time averaging fails when hidden dimensions carry memory.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{sims/figures/fig_nonergodic_memory.pdf}
+\caption{\textbf{Non-ergodic memory breaks time averaging.} (A--B) Raw trajectories for ergodic vs non-ergodic systems. (C--D) Cumulative time averages: ergodic trajectories converge to a common value; non-ergodic trajectories diverge based on hidden state $H$. (E) Distribution of final time averages: ergodic = tight cluster; non-ergodic = bimodal. (F) Conceptual summary.}
+\label{fig:nonergodic}
+\end{figure}
+
+Key results:
+\begin{itemize}
+    \item Trajectories with $H = 0$ converge to time average $\approx 0.25$
+    \item Trajectories with $H = 1$ converge to time average $\approx 0.75$
+    \item The ensemble mean (0.5) is achieved by \emph{no individual trajectory}
+    \item A $t$-test between groups yields $p \ll 0.001$---this is not noise, but structural bias
+\end{itemize}
+
+This is why ``just measure longer'' does not help when the system remembers in dimensions you cannot see.
+
+\subsection{Coverage Collapse in High Dimensions}
+
+Figure~\ref{fig:coverage} demonstrates why ensemble averaging becomes impractical as dimensionality increases.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{sims/figures/fig_sample_complexity.pdf}
+\caption{\textbf{The curse of dimensionality for coverage.} (A) Coverage vs dimension at fixed $N = 1000$ samples. (B) Total cells ($3^n$) vs dimension---the exponential wall. (C) Coverage curves for different dimensions. (D) Conceptual summary: ``This is not `we need more data'---this is `the required data doesn't exist.'\,''}
+\label{fig:coverage}
+\end{figure}
+
+Key results (with $k = 3$ bins per dimension, $N = 1000$ samples):
+\begin{itemize}
+    \item At $n = 5$: 99\% coverage (adequate)
+    \item At $n = 10$: 1.7\% coverage (sparse)
+    \item At $n = 15$: 0.007\% coverage (effectively zero)
+\end{itemize}
+
+The curse is \emph{exponential}: doubling sample size buys almost nothing in coverage. One would need to exponentiate the sample size to keep pace with dimensional growth---functionally impossible for biological systems with $n > 10$.
+
 \section{Discussion}
 
 \subsection{Topological Aliasing as a Fundamental Limit}
@@ -212,9 +273,9 @@ There is a further consequence. Sub-Landauer structural changes---a phosphorylat
 
 This creates a trilemma for high-dimensional biological inference:
 \begin{enumerate}
-    \item \textbf{Time averaging fails}: non-ergodicity means temporal samples are not equivalent to ensemble samples.
-    \item \textbf{Ensemble averaging is impractical}: the curse of dimensionality demands sample sizes that scale as $k^n$---functionally infinite for biological dimensions.
-    \item \textbf{Direct measurement is destructive}: energy injection sufficient to resolve sub-Landauer structure perturbs the system beyond recovery.
+    \item \textbf{Time averaging fails} (Figure~\ref{fig:nonergodic}): non-ergodicity means temporal samples are not equivalent to ensemble samples.
+    \item \textbf{Ensemble averaging is impractical} (Figure~\ref{fig:coverage}): the curse of dimensionality demands sample sizes that scale as $k^n$---functionally infinite for biological dimensions.
+    \item \textbf{Direct measurement is destructive} (Figure~\ref{fig:sr}): energy injection sufficient to resolve sub-Landauer structure perturbs the system beyond recovery.
 \end{enumerate}
 All three classical escape routes from measurement uncertainty are blocked. This is not a technological limitation awaiting better instruments; it is a structural feature of high-dimensional systems operating near thermodynamic limits.
 
