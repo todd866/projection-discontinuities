@@ -189,7 +189,7 @@ Figure~\ref{fig:shadow_box} shows the Lorenz attractor and its 2D projection.
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{figures/fig_shadow_box.pdf}
-\caption{\textbf{The Shadow Box---Topological aliasing when $D_{\text{sys}} > D_{\text{obs}}$.} (A) Full 3D Lorenz attractor ($D_{\text{sys}} = 3$) colored by true dynamical state. (B) 2D projection ($D_{\text{obs}} = 2$) with binary cut at $z = 25$. (C) Aliasing revealed: 47\% of points misclassified, with 199 apparent ``teleportations'' where the shadow jumps across the cut while the system flows continuously. See \texttt{generate\_figures.py}.}
+\caption{\textbf{The Shadow Box---Topological aliasing when $D_{\text{sys}} > D_{\text{obs}}$.} (A) Full 3D Lorenz attractor ($D_{\text{sys}} = 3$) colored by true dynamical state. (B) 2D projection ($D_{\text{obs}} = 2$) with binary cut at $z = 25$. (C) Aliasing revealed: 47\% of points misclassified, with 199 apparent ``teleportations'' where the shadow jumps across the cut while the system flows continuously. See \texttt{toolkit/demo\_lorenz.py}.}
 \label{fig:shadow_box}
 \end{figure}
 
@@ -287,7 +287,7 @@ Figure~\ref{fig:nonergodic} demonstrates why time averaging fails when hidden di
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{figures/fig_nonergodic_memory.pdf}
-\caption{\textbf{Non-ergodic memory---Time averaging fails when hidden states store history.} (A--B) Raw trajectories: ergodic systems explore the same region; non-ergodic systems diverge by hidden state $H$. (C--D) Cumulative time averages: ergodic converge to ensemble mean; non-ergodic converge to $H$-dependent values. The ensemble mean (0.5) is reached by no individual trajectory. (E) Final distribution: ergodic = tight; non-ergodic = bimodal. (F) Schematic. See \texttt{generate\_figures.py}.}
+\caption{\textbf{Non-ergodic memory---Time averaging fails when hidden states store history.} (A--B) Raw trajectories: ergodic systems explore the same region; non-ergodic systems diverge by hidden state $H$. (C--D) Cumulative time averages: ergodic converge to ensemble mean; non-ergodic converge to $H$-dependent values. The ensemble mean (0.5) is reached by no individual trajectory. (E) Final distribution: ergodic = tight; non-ergodic = bimodal. (F) Schematic. See \texttt{toolkit/demo\_memory.py}.}
 \label{fig:nonergodic}
 \end{figure}
 
