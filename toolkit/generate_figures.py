@@ -44,7 +44,9 @@ plt.rcParams.update({
     'axes.spines.right': False,
 })
 
-os.makedirs('figures', exist_ok=True)
+# Output to parent figures directory
+FIGURES_DIR = os.path.join(os.path.dirname(__file__), '..', 'figures')
+os.makedirs(FIGURES_DIR, exist_ok=True)
 
 
 # =============================================================================
@@ -145,7 +147,7 @@ def generate_fig1_shadow_box():
     ax3.legend(loc='upper right', framealpha=0.9)
 
     plt.tight_layout()
-    plt.savefig('figures/fig_shadow_box.pdf')
+    plt.savefig(os.path.join(FIGURES_DIR, 'fig_shadow_box.pdf'))
     plt.close()
     print("  Saved: figures/fig_shadow_box.pdf")
 
@@ -214,12 +216,12 @@ def generate_fig2_multi_dataset():
     for i, j in false_neighbors[:200]:
         ax1.plot([tsne_coords[i, 0], tsne_coords[j, 0]],
                  [tsne_coords[i, 1], tsne_coords[j, 1]],
-                 'm-', alpha=0.3, linewidth=0.5)
+                 color='#8B0000', alpha=0.5, linewidth=0.7)
 
     ax1.set_xlabel('t-SNE 1')
     ax1.set_ylabel('t-SNE 2')
     ax1.set_title('A. The "hairball of truth"')
-    ax1.text(0.02, 0.98, 'Magenta = false neighbors\n(2D neighbors that weren\'t\nneighbors in high-D)',
+    ax1.text(0.02, 0.98, 'Dark red = false neighbors\n(2D neighbors that weren\'t\nneighbors in high-D)',
              transform=ax1.transAxes, fontsize=8, va='top',
              bbox=dict(boxstyle='round', facecolor='white', alpha=0.8))
 
@@ -297,7 +299,7 @@ def generate_fig2_multi_dataset():
     ax4.set_title('D. Summary', y=0.95)
 
     plt.tight_layout()
-    plt.savefig('figures/fig_multi_dataset.pdf')
+    plt.savefig(os.path.join(FIGURES_DIR, 'fig_multi_dataset.pdf'))
     plt.close()
     print("  Saved: figures/fig_multi_dataset.pdf")
 
@@ -450,7 +452,7 @@ def generate_fig3_nonergodic():
     ax6.set_title('F. Conceptual summary')
 
     plt.tight_layout()
-    plt.savefig('figures/fig_nonergodic_memory.pdf')
+    plt.savefig(os.path.join(FIGURES_DIR, 'fig_nonergodic_memory.pdf'))
     plt.close()
     print("  Saved: figures/fig_nonergodic_memory.pdf")
 
@@ -544,7 +546,7 @@ def generate_fig4_regime():
                  arrowprops=dict(arrowstyle='->', color='black', lw=2))
 
     plt.tight_layout()
-    plt.savefig('figures/fig_scale_dependent.pdf')
+    plt.savefig(os.path.join(FIGURES_DIR, 'fig_scale_dependent.pdf'))
     plt.close()
     print("  Saved: figures/fig_scale_dependent.pdf")
 
@@ -629,7 +631,7 @@ def generate_fig5_stochastic_resonance():
     ax3.legend(loc='lower right', framealpha=0.9)
 
     plt.tight_layout()
-    plt.savefig('figures/fig_sub_landauer_sr.pdf')
+    plt.savefig(os.path.join(FIGURES_DIR, 'fig_sub_landauer_sr.pdf'))
     plt.close()
     print("  Saved: figures/fig_sub_landauer_sr.pdf")
 
@@ -694,7 +696,7 @@ def generate_fig6_coverage():
     ax3.set_ylim(0, 1.05)
 
     plt.tight_layout()
-    plt.savefig('figures/fig_sample_complexity.pdf')
+    plt.savefig(os.path.join(FIGURES_DIR, 'fig_sample_complexity.pdf'))
     plt.close()
     print("  Saved: figures/fig_sample_complexity.pdf")
 

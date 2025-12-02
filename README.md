@@ -32,8 +32,9 @@ python demo_lorenz.py          # Shadow box demonstration
 ### Reproduce Paper Figures
 
 ```bash
-python generate_figures.py     # Regenerates all figures into ./figures/
-pytest toolkit/tests/          # Run tests (optional)
+cd toolkit
+python generate_figures.py     # Regenerates all figures into ../figures/
+pytest tests/                  # Run tests (optional)
 ```
 
 ---
@@ -58,6 +59,7 @@ This repository contains:
 limits-of-falsifiability/
 ├── toolkit/                    # ← START HERE
 │   ├── falsifiability.py       # Complete library (~600 lines)
+│   ├── generate_figures.py     # Reproduce paper figures
 │   ├── demo_lorenz.py          # Shadow box: topological aliasing
 │   ├── demo_scrna.py           # scRNA-seq aliasing analysis
 │   ├── demo_regime.py          # Popper vs Ensemble regimes
@@ -65,14 +67,13 @@ limits-of-falsifiability/
 │   ├── setup.py                # pip install .
 │   └── README.md               # API documentation
 │
-├── biosystems_2025_published.pdf   # Paper 1 (published)
-├── paper2_shadow_geometry.pdf      # Paper 2 (ready)
-├── paper2_shadow_geometry.tex      # Paper 2 source
-├── LICENSE                         # MIT License
+├── paper2/                     # Paper 2 source files
+│   └── paper2_shadow_geometry.tex
 │
-├── figures/                    # Generated figures
-├── archive_sims/               # Original simulation scripts (historical)
-└── archive/                    # Other archived materials
+├── biosystems_2025_published.pdf   # Paper 1 (published)
+├── paper2_shadow_geometry.pdf      # Paper 2 (in review)
+├── figures/                        # Generated figures
+└── LICENSE
 ```
 
 ---

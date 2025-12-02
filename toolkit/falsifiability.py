@@ -479,7 +479,7 @@ def plot_hairball(data_2d, data_high_d, n_lines=300, k=5, save_path=None):
     # Right: The Truth (with hairball)
     ax2 = axes[1]
     ax2.scatter(data_2d[:, 0], data_2d[:, 1], c='lightgray', s=5, alpha=0.4)
-    lc = LineCollection(segments, colors='magenta', linewidths=0.4, alpha=0.25)
+    lc = LineCollection(segments, colors='#8B0000', linewidths=0.6, alpha=0.4)
     ax2.add_collection(lc)
     ax2.scatter(data_2d[idx_sources, 0], data_2d[idx_sources, 1], c='black', s=12, zorder=10)
     ax2.set_title("B. The Truth (High-D Neighbors Connected)", fontsize=12, fontweight='bold')

@@ -1,1 +1,35 @@
+# Archives
 archive/
+archive_sims/
+
+# LaTeX build artifacts
+*.aux
+*.log
+*.out
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.synctex.gz
+*.toc
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Data files (too large for git)
+*.h5ad
+*.csv
+*.parquet
+
+# Submission package (local only)
+submission_package/
