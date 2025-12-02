@@ -28,6 +28,8 @@ from matplotlib.collections import LineCollection
 from sklearn.decomposition import PCA
 from sklearn.neighbors import NearestNeighbors
 from sklearn.manifold import TSNE
+from sklearn.cluster import KMeans
+from sklearn.linear_model import LogisticRegression
 import os
 import sys
 
@@ -128,6 +130,117 @@ def compute_coverage(data, n_bins=3):
 
     coverage = n_occupied / n_total_cells
     return coverage, n_occupied, n_total_cells, n_dim
+
+
+def compute_cluster_aliasing(data_high_d, data_low_d, n_clusters=8):
+    """
+    Mirror the Lorenz shadow box analysis:
+    1. Cluster in high-D space (ground truth labels)
+    2. Train classifier on low-D coordinates
+    3. Measure mismatch = how often the shadow lies about cluster identity
+
+    This directly parallels the Lorenz lobe misclassification analysis.
+    """
+    # Cluster in high-D
+    kmeans_high = KMeans(n_clusters=n_clusters, random_state=42, n_init=10)
+    labels_true = kmeans_high.fit_predict(data_high_d)
+
+    # Train classifier on low-D to predict high-D labels
+    clf = LogisticRegression(max_iter=500, random_state=42)
+    clf.fit(data_low_d, labels_true)
+    labels_pred = clf.predict(data_low_d)
+
+    # Misclassification rate = aliasing
+    mismatch_rate = np.mean(labels_true != labels_pred)
+
+    return mismatch_rate, labels_true, labels_pred
+
+
+def compute_trustworthiness(data_high_d, data_low_d, k=10):
+    """
+    Standard trustworthiness metric (Venna & Kaski 2006).
+    Measures how many low-D neighbors are "false" (not neighbors in high-D).
+
+    T(k) = 1 - (2 / (Nk(2n-3k-1))) * sum of rank errors for false neighbors
+
+    Returns value in [0, 1] where 1 = perfect preservation.
+    """
+    n = len(data_high_d)
+
+    # Get k-NN in both spaces
+    nn_high = NearestNeighbors(n_neighbors=n, algorithm='auto')
+    nn_low = NearestNeighbors(n_neighbors=k+1, algorithm='auto')
+
+    nn_high.fit(data_high_d)
+    nn_low.fit(data_low_d)
+
+    # Get all distances and indices for rank computation
+    dist_high, _ = nn_high.kneighbors(data_high_d)
+    _, neighbors_low = nn_low.kneighbors(data_low_d)
+    neighbors_low = neighbors_low[:, 1:]  # Exclude self
+
+    # Compute ranks in high-D space
+    ranks_high = np.argsort(np.argsort(dist_high, axis=1), axis=1)
+
+    # Compute trustworthiness
+    penalty = 0
+    for i in range(n):
+        for j_idx in range(k):
+            j = neighbors_low[i, j_idx]
+            r_ij = ranks_high[i, j]
+            if r_ij > k:  # j is a false neighbor
+                penalty += (r_ij - k)
+
+    # Normalize
+    trust = 1 - (2 / (n * k * (2 * n - 3 * k - 1))) * penalty
+    return max(0, min(1, trust))
+
+
+def compute_aliasing_sweep(data_pca, d_obs_values=[2, 3, 5, 10, 15], k=10):
+    """
+    Sweep D_obs and measure aliasing at each level.
+    Shows that aliasing decreases as D_obs approaches D_sys.
+    """
+    results = []
+
+    for d_obs in d_obs_values:
+        if d_obs >= data_pca.shape[1]:
+            continue
+
+        # Use PCA projection to D_obs (fast, deterministic)
+        data_low = data_pca[:, :d_obs]
+
+        # Compute aliasing
+        aliasing, _ = compute_topological_aliasing(data_pca, data_low, k=k)
+        results.append((d_obs, aliasing))
+
+    return results
+
+
+def compare_embedding_methods(data_pca, n_subsample=3000):
+    """
+    Compare aliasing across different embedding methods:
+    - PCA to 2D
+    - t-SNE to 2D
+    """
+    # Subsample for speed
+    idx = np.random.choice(len(data_pca), min(n_subsample, len(data_pca)), replace=False)
+    data_sub = data_pca[idx]
+
+    results = {}
+
+    # PCA 2D
+    pca_2d = data_sub[:, :2]
+    aliasing_pca, _ = compute_topological_aliasing(data_sub, pca_2d, k=10)
+    results['PCA-2D'] = aliasing_pca
+
+    # t-SNE 2D
+    tsne = TSNE(n_components=2, perplexity=30, random_state=42, max_iter=500)
+    tsne_2d = tsne.fit_transform(data_sub)
+    aliasing_tsne, _ = compute_topological_aliasing(data_sub, tsne_2d, k=10)
+    results['t-SNE-2D'] = aliasing_tsne
+
+    return results, idx
 
 
 def plot_aliasing_network(data_2d, data_high_d, n_lines=300, k=5):
@@ -321,6 +434,52 @@ def run_simulation():
     print(f"  Total possible cells: 3^{n_dim} = {n_total:,.0f}")
     print(f"  Cells occupied: {n_occ:,}")
     print(f"  Coverage: {coverage:.2e} ({coverage*100:.4f}%)")
+
+    # =========================================================================
+    # 5. CLUSTER-BASED ALIASING (Mirror Lorenz shadow box)
+    # =========================================================================
+    print("\n" + "-" * 40)
+    print("[5] CLUSTER-BASED ALIASING (Lorenz-style)")
+    print("-" * 40)
+
+    cluster_aliasing, labels_true, labels_pred = compute_cluster_aliasing(
+        data_pca_sub, data_2d, n_clusters=8
+    )
+    print(f"  Clusters in high-D: 8 (KMeans)")
+    print(f"  Classifier in 2D: Logistic Regression")
+    print(f"  Cluster misassignment rate: {cluster_aliasing:.1%}")
+    print(f"  → {cluster_aliasing*100:.0f}% of cells are assigned to the wrong")
+    print(f"     cluster when we classify based on 2D coordinates alone")
+
+    # =========================================================================
+    # 6. D_obs SWEEP
+    # =========================================================================
+    print("\n" + "-" * 40)
+    print("[6] D_obs SWEEP (Aliasing vs Embedding Dimension)")
+    print("-" * 40)
+
+    d_obs_values = [2, 3, 5, 10, 15, 20, 30]
+    aliasing_sweep = compute_aliasing_sweep(data_pca_sub, d_obs_values, k=10)
+
+    print("  D_obs → Aliasing Rate:")
+    for d_obs, alias in aliasing_sweep:
+        bar = "█" * int(alias * 30)
+        print(f"    {d_obs:3d}D → {alias:.1%} {bar}")
+
+    # =========================================================================
+    # 7. EMBEDDING METHOD COMPARISON
+    # =========================================================================
+    print("\n" + "-" * 40)
+    print("[7] EMBEDDING METHOD COMPARISON")
+    print("-" * 40)
+
+    print("  Comparing PCA-2D vs t-SNE-2D...")
+    method_results, _ = compare_embedding_methods(data_pca_sub, n_subsample=2000)
+
+    print("  Method → Aliasing Rate:")
+    for method, alias in method_results.items():
+        bar = "█" * int(alias * 30)
+        print(f"    {method:10s} → {alias:.1%} {bar}")
 
     # =========================================================================
     # PLOTTING
