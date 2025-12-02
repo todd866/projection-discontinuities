@@ -41,13 +41,29 @@ This toolkit measures exactly how much the projection lies.
 
 ## Files
 
-| File | Purpose |
-|------|---------|
-| `falsifiability.py` | The complete library (~600 lines, well-documented) |
-| `demo_lorenz.py` | Lorenz attractor "shadow box" demonstration |
-| `demo_scrna.py` | scRNA-seq aliasing analysis |
-| `README.md` | This file |
-| `requirements.txt` | Dependencies |
+| File | Purpose | Trilemma Leg |
+|------|---------|--------------|
+| `falsifiability.py` | The complete library (~600 lines) | Core metrics |
+| `demo_lorenz.py` | Lorenz shadow box | Spatial (aliasing) |
+| `demo_scrna.py` | scRNA-seq aliasing | Spatial (aliasing) |
+| `demo_regime.py` | Falsifiability regime diagram | When Popper fails |
+| `demo_memory.py` | Non-ergodic memory | Temporal (time avg fails) |
+| `README.md` | This file | |
+| `requirements.txt` | Dependencies | |
+
+---
+
+## The Inference Trilemma
+
+The toolkit demonstrates that **all three classical escape routes from measurement uncertainty are blocked**:
+
+| Escape Route | Why It Fails | Demo |
+|--------------|--------------|------|
+| **Ensemble averaging** | Curse of dimensionality: can't sample high-D space | `demo_scrna.py` |
+| **Time averaging** | Non-ergodicity: hidden memory breaks ergodic assumption | `demo_memory.py` |
+| **Direct measurement** | Perturbation: energy injection destroys the phenomenon | (physical principle) |
+
+This is not a technological limitation. It is a structural feature of high-dimensional systems.
 
 ---
 
