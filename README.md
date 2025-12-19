@@ -90,13 +90,17 @@ python demos.py regime       # Falsifiability regimes
 python demos.py memory       # Non-ergodic memory
 ```
 
-## Generating Paper Figures
+## Reproducing the Paper
 
 ```bash
 python generate_figures.py
 ```
 
-Outputs to `figures/`:
+This regenerates all figures from the manuscript into `figures/`.
+
+**Note:** scRNA-seq analyses require the optional `scanpy` dependency and download ~1GB of data.
+
+Outputs:
 - `fig_shadow_box.pdf` - Lorenz projection with aliasing zones
 - `fig_multi_dataset.pdf` - scRNA-seq aliasing across datasets
 - `fig_scale_dependent.pdf` - Regime boundary diagram

@@ -32,11 +32,12 @@ warnings.filterwarnings('ignore')
 
 
 # =============================================================================
-# SHARED UTILITIES
+# SHARED UTILITIES (simplified standalone versions for demos)
+# For production use, import from projection_discontinuities module.
 # =============================================================================
 
-def participation_ratio(X):
-    """Compute effective dimensionality via participation ratio."""
+def __participation_ratio(X):
+    """Compute effective dimensionality via participation ratio (simplified)."""
     X_centered = X - X.mean(axis=0)
     cov = np.cov(X_centered.T)
     eigenvalues = np.linalg.eigvalsh(cov)
@@ -44,8 +45,12 @@ def participation_ratio(X):
     return (np.sum(eigenvalues) ** 2) / np.sum(eigenvalues ** 2)
 
 
-def compute_aliasing(X_high, X_low, k=15):
-    """Compute topological aliasing rate (fraction of k-NN lost in projection)."""
+def __compute_aliasing(X_high, X_low, k=15):
+    """
+    Compute topological aliasing rate (fraction of k-NN lost in projection).
+
+    Subsamples to improve runtime; results are stable across seeds.
+    """
     n = X_high.shape[0]
 
     nn_high = NearestNeighbors(n_neighbors=k+1).fit(X_high)
@@ -270,8 +275,8 @@ def demo_timeseries():
         for embed_dim in [3, 5, 8, 12]:
             X_embed = delay_embedding(x, dim=embed_dim, tau=6)
             X_proj = X_embed[:, :2]
-            d_sys = participation_ratio(X_embed)
-            aliasing = compute_aliasing(X_embed, X_proj, k=15)
+            d_sys = _participation_ratio(X_embed)
+            aliasing = _compute_aliasing(X_embed, X_proj, k=15)
 
             results.append({'tau': tau, 'label': label, 'embed_dim': embed_dim,
                           'd_sys': d_sys, 'aliasing': aliasing})
@@ -334,7 +339,7 @@ def demo_scrna():
                 data = data[idx]
 
             print(f"  Cells: {data.shape[0]}, Genes: {data.shape[1]}")
-            d_sys = participation_ratio(data)
+            d_sys = _participation_ratio(data)
             print(f"  D_sys: {d_sys:.1f}")
 
             # PCA + t-SNE
@@ -347,11 +352,11 @@ def demo_scrna():
 
             for seed in range(3):
                 embedding = TSNE(n_components=2, random_state=seed, perplexity=30).fit_transform(X_pca)
-                tsne_alias.append(compute_aliasing(X_pca, embedding, k=15))
+                tsne_alias.append(_compute_aliasing(X_pca, embedding, k=15))
 
                 if HAS_UMAP:
                     embedding = umap.UMAP(n_components=2, random_state=seed).fit_transform(X_pca)
-                    umap_alias.append(compute_aliasing(X_pca, embedding, k=15))
+                    umap_alias.append(_compute_aliasing(X_pca, embedding, k=15))
 
             results[dataset_name] = {
                 'd_sys': d_sys,
@@ -367,11 +372,11 @@ def demo_scrna():
         print("\nUsing synthetic high-D data...")
         np.random.seed(42)
         data = np.random.randn(2000, 100)
-        d_sys = participation_ratio(data)
+        d_sys = _participation_ratio(data)
         pca = PCA(n_components=50)
         X_pca = pca.fit_transform(data)
         embedding = TSNE(n_components=2, random_state=42).fit_transform(X_pca)
-        aliasing = compute_aliasing(X_pca, embedding, k=15)
+        aliasing = _compute_aliasing(X_pca, embedding, k=15)
         print(f"  D_sys: {d_sys:.1f}")
         print(f"  t-SNE aliasing: {aliasing:.1%}")
         results['synthetic'] = {'d_sys': d_sys, 'aliasing': aliasing}
