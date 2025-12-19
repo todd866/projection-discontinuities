@@ -36,7 +36,7 @@ warnings.filterwarnings('ignore')
 # For production use, import from projection_discontinuities module.
 # =============================================================================
 
-def __participation_ratio(X):
+def _participation_ratio(X):
     """Compute effective dimensionality via participation ratio (simplified)."""
     X_centered = X - X.mean(axis=0)
     cov = np.cov(X_centered.T)
@@ -45,7 +45,7 @@ def __participation_ratio(X):
     return (np.sum(eigenvalues) ** 2) / np.sum(eigenvalues ** 2)
 
 
-def __compute_aliasing(X_high, X_low, k=15):
+def _compute_aliasing(X_high, X_low, k=15):
     """
     Compute topological aliasing rate (fraction of k-NN lost in projection).
 

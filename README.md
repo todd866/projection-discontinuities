@@ -40,44 +40,23 @@ pip install -e ".[scanpy]"
 
 ## Quick Start
 
-### Lorenz Attractor Demo
+The easiest way to run the analyses is via `demos.py`:
 
-```python
-from projection_discontinuities import (
-    generate_lorenz_trajectory,
-    compute_shadow_aliasing,
-    count_teleportations
-)
+```bash
+# Lorenz shadow box demonstration
+python demos.py lorenz
 
-# Generate Lorenz trajectory
-xyz = generate_lorenz_trajectory(n_points=10000)
+# Compare Lorenz, Rössler, and Hénon attractors
+python demos.py chaotic
 
-# Compute aliasing in (y,z) projection
-aliasing = compute_shadow_aliasing(xyz)
-print(f"Aliasing rate: {aliasing:.1%}")
+# Mackey-Glass time series embedding
+python demos.py timeseries
 
-# Count false discontinuities
-teleports = count_teleportations(xyz)
-print(f"False discontinuities: {teleports}")
+# scRNA-seq aliasing (requires scanpy)
+python demos.py scrna
 ```
 
-### scRNA-seq Analysis
-
-```python
-from projection_discontinuities import (
-    load_scanpy_dataset,
-    analyze_dataset
-)
-
-# Load standard dataset
-data, name, species = load_scanpy_dataset('pbmc3k')
-
-# Compute aliasing metrics
-results = analyze_dataset(data, name)
-print(f"Effective dimension: {results['d_eff']:.1f}")
-print(f"Aliasing rate: {results['aliasing']:.1%}")
-print(f"Coverage: {results['coverage']:.4%}")
-```
+Each demo prints quantitative results and saves figures to `figures/`.
 
 ## Demos
 
@@ -109,22 +88,15 @@ Outputs:
 - `fig_scale_dependent.pdf` - Regime boundary diagram
 - `fig_sub_landauer_sr.pdf` - Stochastic resonance scaling
 
-## Core Functions
+## Core Metrics
 
-### Metrics
-- `participation_ratio(X)` - Effective dimensionality via eigenvalue concentration
-- `compute_aliasing(X, X_proj)` - Fraction of neighbors destroyed by projection
-- `compute_coverage(X)` - State space coverage estimate
+The toolkit computes three key metrics:
 
-### Lorenz Analysis
-- `generate_lorenz_trajectory()` - Integrate Lorenz system
-- `compute_shadow_aliasing()` - Aliasing rate in 2D projection
-- `count_teleportations()` - False discontinuities in shadow
+- **Participation ratio** ($D_{\text{sys}}$): Effective dimensionality via eigenvalue concentration
+- **Topological aliasing rate**: Fraction of k-NN neighbors destroyed by projection
+- **Coverage**: State space coverage estimate (for curse of dimensionality analysis)
 
-### Visualization
-- `plot_shadow_box()` - Lorenz attractor with projection overlay
-- `plot_metrics_dashboard()` - Multi-panel aliasing summary
-- `plot_regime_boundary()` - Binary test failure regions
+See `projection_discontinuities.py` for the full implementation.
 
 ## Paper
 

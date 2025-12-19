@@ -271,13 +271,12 @@ def generate_fig2_multi_dataset():
     ax4 = fig.add_subplot(2, 2, 4)
     ax4.axis('off')
 
+    # Updated to match 2-dataset story in manuscript Table 5
     table_data = [
-        ['Dataset', '$D_{sys}$', 'Aliasing', 'N cells'],
-        ['Sade-Feldman', '12.5', '66.2%', '16,291'],
-        ['PBMC 3k', '14.8', '83.1%', '2,700'],
-        ['Paul15', '8.7', '78.4%', '2,730'],
-        ['PBMC 68k', '38.7', '74.3%', '68,579'],
-        ['Average', '18.7', '75.5%', '90,300 total'],
+        ['Dataset', '$D_{sys}$', 't-SNE', 'UMAP'],
+        ['PBMC 3k', '38.8', '73.6%', '81.8%'],
+        ['Paul15', '110.9', '67.4%', '76.8%'],
+        ['Average', '—', '70.5%', '79.3%'],
     ]
 
     table = ax4.table(cellText=table_data[1:], colLabels=table_data[0],
@@ -292,8 +291,8 @@ def generate_fig2_multi_dataset():
         table[(0, j)].set_text_props(fontweight='bold')
     # Bold average row
     for j in range(4):
-        table[(5, j)].set_facecolor('#e8e8e8')
-        table[(5, j)].set_text_props(fontweight='bold')
+        table[(3, j)].set_facecolor('#e8e8e8')
+        table[(3, j)].set_text_props(fontweight='bold')
 
     ax4.set_title('D. Summary', y=0.95)
 
