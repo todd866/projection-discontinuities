@@ -40,6 +40,8 @@ When a high-dimensional dynamical system is observed through low-dimensional coo
 
 We call this phenomenon \textbf{topological aliasing}. It is not noise, not measurement error, not a failure of statistical power---it is a geometric inevitability when the intrinsic dimension of the system exceeds the dimension of observation. The ``jumps'' are projection artifacts: apparent discontinuities that do not exist in the underlying dynamics.
 
+While the method of False Nearest Neighbors \cite{kennel1992} seeks to identify the minimum embedding dimension required to eliminate overlaps, our topological aliasing metric quantifies the \emph{persistence} of these overlaps when the observation dimension is fixed and insufficient---the typical situation in biological measurement.
+
 This has significant implications for inference in complex systems. When a biological circuit appears to ``switch'' between states, when an ecosystem seems to ``flip'' between regimes, when a cell population shows apparent ``decisions'' between fates---these discontinuities in the observation may not reflect discontinuities in the underlying high-dimensional dynamics. The system may be flowing continuously through dimensions we cannot see.
 
 The present paper develops computational methods to quantify this phenomenon. Building on earlier epistemological arguments about the limits of binary hypothesis testing in high-dimensional systems \cite{todd2025limits}, we provide tools to measure \emph{where} and \emph{how much} causal structure is lost under dimensional projection.
@@ -176,6 +178,8 @@ For each dataset, we computed:
     \item \textbf{Topological aliasing rate}: For each point, we computed the $k = 15$ nearest neighbors in both the high-dimensional PCA space and the 2D embedding. Aliasing is defined as $1 - \text{mean}(\text{Jaccard similarity})$, where the Jaccard similarity measures the overlap between the two neighbor sets. We repeated each embedding with 5 random seeds to assess stability.
 \end{enumerate}
 
+Because scRNA-seq data occupy substantially higher-dimensional manifolds than the low-dimensional dynamical systems considered above, estimated $D_{\text{sys}}$ values are correspondingly larger.
+
 This metric captures how much the 2D projection ``lies'' about neighborhood relationships---the fundamental structure that clustering algorithms rely upon.
 
 \subsection{Sample Complexity and Coverage}
@@ -203,7 +207,7 @@ Key results:
 \begin{itemize}
     \item \textbf{Aliasing rate}: 47\% of states are misclassified by the shadow cut
     \item \textbf{Classification accuracy}: 53\% (barely above chance)
-    \item \textbf{Topological violations}: 199 false discontinuities---times the shadow ``teleports'' while the system flows continuously
+    \item \textbf{Topological violations}: 199 apparent ``teleportations'' (false discontinuities in the projected shadow)---times the shadow jumps across the cut while the system flows continuously
     \item \textbf{Type II error}: 47\% for both lobes
 \end{itemize}
 
@@ -290,7 +294,7 @@ The Lorenz demonstration establishes aliasing in a minimal model. But does this 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{figures/fig_multi_dataset.pdf}
-\caption{\textbf{Schematic illustration of topological aliasing in high-dimensional biological data.} (A) The ``hairball of truth'': dark red lines connect false neighbors (2D neighbors that were not neighbors in high-D). (B--D) Schematic summary of aliasing behavior. \textbf{Quantitative results for real data appear in Table~\ref{tab:results}.}}
+\caption{\textbf{Schematic illustration of topological aliasing in high-dimensional biological data.} (A) The ``hairball of truth'': dark red lines connect false neighbors (2D neighbors that were not neighbors in high-D). (B--D) Schematic summaries illustrating the relationship between intrinsic dimensionality and aliasing across representative datasets; \textbf{quantitative results for the datasets analyzed in this study are reported in Table~\ref{tab:results}}.}
 \label{fig:scrna}
 \end{figure}
 
@@ -510,6 +514,9 @@ Gorban, A.N., Tyukin, I.Y. (2018). Blessing of dimensionality: mathematical foun
 
 \bibitem{takens1981}
 Takens, F. (1981). Detecting strange attractors in turbulence. In \textit{Dynamical Systems and Turbulence, Warwick 1980} (pp. 366--381). Springer.
+
+\bibitem{kennel1992}
+Kennel, M.B., Brown, R., Abarbanel, H.D.I. (1992). Determining embedding dimension for phase-space reconstruction using a geometrical construction. \textit{Physical Review A}, 45(6), 3403--3411.
 
 \bibitem{rossler1976}
 Rössler, O.E. (1976). An equation for continuous chaos. \textit{Physics Letters A}, 57(5), 397--398.

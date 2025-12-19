@@ -17,12 +17,15 @@ This toolkit provides computational methods to:
 
 ## Key Results
 
-Using the **Lorenz attractor** as a minimal model:
-- **47%** of dynamical states are misclassified under 2D projection
-- **199** false discontinuities appear in the shadow that don't exist in the 3D flow
+**Chaotic systems** (Lorenz, Rössler, Hénon):
+- **50-56%** aliasing rates across canonical attractors
+- **199** false discontinuities in Lorenz shadow that don't exist in the 3D flow
 
-Validated on **scRNA-seq data** (n = 90,300 cells across 4 datasets):
-- **75.5%** of apparent neighbors in t-SNE projections were not neighbors in high-dimensional space
+**Time series** (Mackey-Glass delay equation):
+- **50-61%** aliasing for low-chaos (τ=17), **76-91%** for high-chaos (τ=30)
+
+**scRNA-seq benchmarks** (PBMC 3k, Paul15):
+- **70.5%** aliasing (t-SNE), **79.3%** (UMAP), error bars <0.2% across 5 seeds
 
 ## Installation
 

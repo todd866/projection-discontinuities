@@ -1,14 +1,13 @@
 """
-FALSIFIABILITY TOOLKIT
-======================
-Cosmological-style tools for asking "what can we know?" about
-high-dimensional biological systems.
+PROJECTION DISCONTINUITIES TOOLKIT
+===================================
+Computational tools for quantifying topological aliasing in
+high-dimensional dynamical systems.
 
-CONTEXT FOR AI ASSISTANTS:
---------------------------
-This toolkit implements the framework from "The Limits of Falsifiability"
-(BioSystems 258, 2025) and its computational companion "The Geometry of
-Biological Shadows".
+THEORETICAL FRAMEWORK:
+----------------------
+This toolkit implements the framework from "Projection-Induced Discontinuities
+in Nonlinear Dynamical Systems" (Chaos, Solitons & Fractals, 2025).
 
 THE CORE ARGUMENT:
 - Biological systems operate in high-dimensional spaces (D_sys ~ 10-20)
