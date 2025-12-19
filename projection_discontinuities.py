@@ -21,12 +21,6 @@ THE KEY METRICS:
 - Aliasing: Fraction of low-D neighbors that weren't high-D neighbors
 - Coverage: Fraction of high-D space actually sampled (approaches 0 fast)
 
-THE PHILOSOPHICAL POINT:
-Standard bioinformatics treats 2D plots as ground truth. We show they're
-shadows that actively lie about topology. Biology needs to think like
-cosmology: accept fundamental observational limits and build epistemology
-around them.
-
 SECTIONS:
 1. METRICS - Core measurements (D_sys, aliasing, coverage)
 2. LOADERS - Data loading (synthetic, scanpy datasets)
@@ -130,7 +124,7 @@ def participation_ratio(data, n_components=100):
     return pr, eigenvalues
 
 
-def compute_aliasing(data_high_d, data_low_d, k=10):
+def compute_aliasing(data_high_d, data_low_d, k=15):
     """
     Measure topological aliasing: how often does the shadow lie about neighbors?
 
@@ -669,7 +663,7 @@ def analyze_dataset(data, name="Dataset", verbose=True, embedding_fn=None, rando
     # 3. Aliasing
     if verbose:
         print("  Computing aliasing...")
-    aliasing, jaccard = compute_aliasing(data_pca_sub, data_2d, k=10)
+    aliasing, jaccard = compute_aliasing(data_pca_sub, data_2d, k=15)
     if verbose:
         print(f"    Aliasing = {aliasing:.1%}")
 

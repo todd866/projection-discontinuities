@@ -264,8 +264,8 @@ def generate_fig2_multi_dataset():
     ax3.set_xlabel('$D_{sys}$ (intrinsic dimensionality)')
     ax3.set_ylabel('Topological aliasing (%)')
     ax3.set_title('C. Dimensionality vs aliasing')
-    ax3.set_xlim(5, 45)
-    ax3.set_ylim(45, 90)
+    ax3.set_xlim(0, 130)
+    ax3.set_ylim(60, 80)
 
     # Panel D: Summary statistics table
     ax4 = fig.add_subplot(2, 2, 4)

@@ -350,7 +350,7 @@ def demo_scrna():
             tsne_alias = []
             umap_alias = []
 
-            for seed in range(3):
+            for seed in range(5):
                 embedding = TSNE(n_components=2, random_state=seed, perplexity=30).fit_transform(X_pca)
                 tsne_alias.append(_compute_aliasing(X_pca, embedding, k=15))
 
