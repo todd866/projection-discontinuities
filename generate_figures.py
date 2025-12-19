@@ -44,8 +44,8 @@ plt.rcParams.update({
     'axes.spines.right': False,
 })
 
-# Output to parent figures directory
-FIGURES_DIR = os.path.join(os.path.dirname(__file__), '..', 'figures')
+# Output to local figures directory
+FIGURES_DIR = os.path.join(os.path.dirname(__file__), 'figures')
 os.makedirs(FIGURES_DIR, exist_ok=True)
 
 
