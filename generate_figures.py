@@ -162,12 +162,11 @@ def generate_fig2_multi_dataset():
     print("Generating Figure 2: Multi-dataset aliasing...")
     np.random.seed(42)
 
-    # Simulate 4 datasets with realistic properties (sorted by aliasing rate for visual impact)
+    # Two standard benchmarks with computed values (from demos.py)
+    # These are illustrative values for the schematic figure; see Table for exact numbers
     datasets = [
-        {'name': 'Sade-Feldman\n(Melanoma)', 'n': 16291, 'd_sys': 12.5, 'alias': 0.662},
-        {'name': 'PBMC 68k\n(10X)', 'n': 68579, 'd_sys': 38.7, 'alias': 0.743},
-        {'name': 'Paul15\n(Bone Marrow)', 'n': 2730, 'd_sys': 8.7, 'alias': 0.784},
-        {'name': 'PBMC 3k\n(10X)', 'n': 2700, 'd_sys': 14.8, 'alias': 0.831},
+        {'name': 'Paul15\n(Bone Marrow)', 'n': 2730, 'd_sys': 110.9, 'alias': 0.674, 'alias_umap': 0.768},
+        {'name': 'PBMC 3k\n(10X)', 'n': 2700, 'd_sys': 38.8, 'alias': 0.736, 'alias_umap': 0.818},
     ]
 
     fig = plt.figure(figsize=(12, 8))
@@ -233,7 +232,8 @@ def generate_fig2_multi_dataset():
 
     bars = ax2.bar(range(len(datasets)), aliasing, color=COLORS['left_lobe'], alpha=0.8)
     ax2.axhline(y=50, color='gray', linestyle='--', linewidth=1, label='Random (50%)')
-    ax2.axhline(y=75.5, color='black', linestyle='-', linewidth=1.5, label='Mean (75.5%)')
+    mean_alias = np.mean(aliasing)
+    ax2.axhline(y=mean_alias, color='black', linestyle='-', linewidth=1.5, label=f'Mean ({mean_alias:.1f}%)')
 
     ax2.set_xticks(range(len(datasets)))
     ax2.set_xticklabels(names, fontsize=9)
@@ -253,9 +253,8 @@ def generate_fig2_multi_dataset():
     d_sys = [d['d_sys'] for d in datasets]
     alias_vals = [d['alias'] * 100 for d in datasets]
 
-    ax3.scatter(d_sys, alias_vals, s=100, c=[COLORS['right_lobe'], COLORS['left_lobe'],
-                                              COLORS['correct'], COLORS['nonergodic']],
-                edgecolors='black', linewidths=1)
+    colors = [COLORS['right_lobe'], COLORS['left_lobe']][:len(datasets)]
+    ax3.scatter(d_sys, alias_vals, s=100, c=colors, edgecolors='black', linewidths=1)
 
     for i, d in enumerate(datasets):
         ax3.annotate(d['name'].replace('\n', ' '), (d['d_sys'], d['alias']*100),

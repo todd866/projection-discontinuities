@@ -29,7 +29,7 @@ Sydney, NSW, Australia\\
 \maketitle
 
 \begin{abstract}
-Low-dimensional projections of high-dimensional nonlinear dynamical systems introduce spurious discontinuities that do not exist in the underlying flow. We call this phenomenon \textbf{topological aliasing}: continuous trajectories appear to ``jump'' between states when observed through incomplete coordinates. Using the Lorenz attractor as a minimal model, we demonstrate that when system dimensionality ($D_{\text{sys}}$) exceeds observation dimensionality ($D_{\text{obs}}$), \textbf{47\%} of states are misclassified by binary classification, with 199 apparent ``teleportations'' in the projected shadow. We validate this in biological data: across four scRNA-seq datasets (n = 90,300 cells), \textbf{75.5\% of apparent neighbors in t-SNE projections were not neighbors in high-dimensional space}. This is geometry, not noise---the consequence of projecting $D_{\text{sys}} \approx 10$--40 into $D_{\text{obs}} = 2$. We quantify $\sqrt{N}$ scaling of sub-threshold signal detection via stochastic resonance, and map the regime boundary in (dimensionality $\times$ signal strength) space where binary hypothesis testing transitions from effective to incoherent. We identify an inference trilemma for high-dimensional systems: non-ergodicity precludes time averaging, dimensionality precludes ensemble averaging, and thermodynamic constraints preclude direct measurement. Although illustrated with biological data, these results apply generally to nonlinear dynamical systems observed through incomplete coordinates. All analyses use the open-source \texttt{projection-discontinuities} toolkit.
+Low-dimensional projections of high-dimensional nonlinear dynamical systems introduce spurious discontinuities that do not exist in the underlying flow. We call this phenomenon \textbf{topological aliasing}: continuous trajectories appear to ``jump'' between states when observed through incomplete coordinates. Using the Lorenz attractor as a minimal model, we demonstrate that when system dimensionality ($D_{\text{sys}}$) exceeds observation dimensionality ($D_{\text{obs}}$), \textbf{47\%} of states are misclassified by binary classification, with 199 apparent ``teleportations'' in the projected shadow. We validate this in biological data: across two standard scRNA-seq benchmarks, \textbf{70--80\% of apparent neighbors in t-SNE/UMAP projections were not neighbors in high-dimensional space}. This is geometry, not noise---the consequence of projecting $D_{\text{sys}} \approx 10$--40 into $D_{\text{obs}} = 2$. We quantify $\sqrt{N}$ scaling of sub-threshold signal detection via stochastic resonance, and map the regime boundary in (dimensionality $\times$ signal strength) space where binary hypothesis testing transitions from effective to incoherent. We identify an inference trilemma for high-dimensional systems: non-ergodicity precludes time averaging, dimensionality precludes ensemble averaging, and thermodynamic constraints preclude direct measurement. Although illustrated with biological data, these results apply generally to nonlinear dynamical systems observed through incomplete coordinates. All analyses use the open-source \texttt{projection-discontinuities} toolkit.
 \end{abstract}
 
 \textbf{Keywords:} topological aliasing, nonlinear dynamics, dimensionality reduction, projection artifacts, Lorenz attractor, single-cell RNA sequencing
@@ -153,7 +153,7 @@ An observer seeing only $x$ cannot determine $H$ directly. Their time average co
 
 \subsection{Topological Aliasing in Single-Cell RNA Sequencing}
 
-To validate aliasing in real biological data, we analyzed four standard scRNA-seq datasets spanning different species, tissues, and sample sizes:
+To validate aliasing in real biological data, we analyzed two standard scRNA-seq benchmarks spanning different species and tissues:
 
 \begin{table}[h]
 \centering
@@ -161,10 +161,8 @@ To validate aliasing in real biological data, we analyzed four standard scRNA-se
 \toprule
 \textbf{Dataset} & \textbf{Source} & \textbf{Cells} & \textbf{Genes} \\
 \midrule
-Sade-Feldman (Melanoma) & Human tumor-infiltrating lymphocytes & 16,291 & 16,906 \\
 PBMC 3k & Human peripheral blood (10X Genomics) & 2,700 & 1,838 \\
 Paul15 (Bone Marrow) & Mouse hematopoiesis & 2,730 & 3,451 \\
-PBMC 68k & Human peripheral blood (10X Genomics) & 68,579 & 11,267 \\
 \bottomrule
 \end{tabular}
 \caption{Single-cell datasets used for aliasing validation.}
@@ -174,8 +172,8 @@ PBMC 68k & Human peripheral blood (10X Genomics) & 68,579 & 11,267 \\
 For each dataset, we computed:
 \begin{enumerate}
     \item \textbf{Intrinsic dimensionality} ($D_{\text{sys}}$) via participation ratio on PCA-reduced data (50 components)
-    \item \textbf{t-SNE embedding} using standard parameters (perplexity = 30)
-    \item \textbf{Topological aliasing rate}: For each point, we computed the $k = 15$ nearest neighbors in both the high-dimensional PCA space and the 2D t-SNE space. Aliasing is defined as $1 - \text{mean}(\text{Jaccard similarity})$, where the Jaccard similarity measures the overlap between the two neighbor sets.
+    \item \textbf{t-SNE and UMAP embeddings} using standard parameters (t-SNE: perplexity = 30; UMAP: n\_neighbors = 15, min\_dist = 0.1)
+    \item \textbf{Topological aliasing rate}: For each point, we computed the $k = 15$ nearest neighbors in both the high-dimensional PCA space and the 2D embedding. Aliasing is defined as $1 - \text{mean}(\text{Jaccard similarity})$, where the Jaccard similarity measures the overlap between the two neighbor sets. We repeated each embedding with 5 random seeds to assess stability.
 \end{enumerate}
 
 This metric captures how much the 2D projection ``lies'' about neighborhood relationships---the fundamental structure that clustering algorithms rely upon.
@@ -287,12 +285,12 @@ The key finding: \textbf{aliasing increases with true system dimension}. The low
 
 \subsection{Topological Aliasing in Single-Cell Data}
 
-The Lorenz demonstration establishes aliasing in a minimal model. But does this phenomenon occur in real biological data? Figure~\ref{fig:scrna} presents results from four standard scRNA-seq datasets.
+The Lorenz demonstration establishes aliasing in a minimal model. But does this phenomenon occur in real biological data? Figure~\ref{fig:scrna} presents results from two standard scRNA-seq benchmarks (PBMC 3k and Paul15 bone marrow).
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{figures/fig_multi_dataset.pdf}
-\caption{\textbf{Multi-dataset evidence---High-dimensional systems systematically alias under projection.} (A) Schematic ``hairball of truth'': dark red lines connect false neighbors (2D neighbors that were not neighbors in high-D). (B) Aliasing rates across four scRNA-seq benchmarks, sorted by magnitude; all exceed random expectation (50\%), mean = 75.5\%. (C) $D_{\text{sys}}$ (participation ratio) vs aliasing. (D) Summary. See \texttt{toolkit/demo\_scrna.py}.}
+\caption{\textbf{Schematic illustration of topological aliasing in high-dimensional biological data.} (A) The ``hairball of truth'': dark red lines connect false neighbors (2D neighbors that were not neighbors in high-D). (B--D) Schematic summary of aliasing behavior. \textbf{Quantitative results for real data appear in Table~\ref{tab:results}.}}
 \label{fig:scrna}
 \end{figure}
 
@@ -314,7 +312,7 @@ Paul15 (Bone Marrow) & 110.9 & 67.4\% $\pm$ 0.1\% & 76.8\% $\pm$ 0.2\% & 0.002\%
 
 Key findings:
 \begin{itemize}
-    \item \textbf{Aliasing is universal}: All four datasets show $>65\%$ aliasing, regardless of species (human vs mouse), tissue (blood vs tumor vs bone marrow), or sample size (2,700 to 68,579 cells).
+    \item \textbf{Aliasing is consistent}: Both datasets show $>65\%$ aliasing for t-SNE and $>75\%$ for UMAP, across different species (human vs mouse) and tissues (blood vs bone marrow).
     \item \textbf{Aliasing correlates with dimensionality}: Higher $D_{\text{sys}}$ generally predicts higher aliasing, as expected from the geometric argument.
     \item \textbf{The ``hairball'' is dense}: The visual density of false-neighbor connections (Figure~\ref{fig:scrna}B) demonstrates that this is not an edge effect---aliasing pervades the entire embedding.
 \end{itemize}
