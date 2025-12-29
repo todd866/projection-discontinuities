@@ -1,134 +1,63 @@
 # The Limits of Falsifiability
 
-[![Tests](https://github.com/todd866/limits-of-falsifiability/actions/workflows/tests.yml/badge.svg)](https://github.com/todd866/limits-of-falsifiability/actions/workflows/tests.yml)
-[![DOI](https://zenodo.org/badge/1107632667.svg)](https://doi.org/10.5281/zenodo.17791874)
-[![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
-[![Regime: Ensemble](https://img.shields.io/badge/Regime-Ensemble-red.svg)](#the-falsifiability-regimes)
+**Published in BioSystems 258, 105608 (2025)**
 
-**When biology's shadows lie: measuring how much dimensional projections destroy topology**
+[![DOI](https://img.shields.io/badge/DOI-10.1016/j.biosystems.2025.105608-blue)](https://doi.org/10.1016/j.biosystems.2025.105608)
 
----
+## Overview
 
-## Quick Start
+When biological systems operate in high-dimensional state spaces but we observe only low-dimensional projections, classical falsifiability becomes geometrically incoherent. This paper develops the theory of how dimensional projection destroys the epistemic conditions required for binary hypothesis testing.
 
-### Installation
+**Key result:** When D_sys >> D_obs, topological aliasing makes it impossible to distinguish between structurally distinct hypotheses from projected observations alone.
 
-```bash
-cd toolkit
-pip install .                # Core functionality
-pip install ".[scanpy]"      # With real scRNA-seq data support
-```
+## Version History
 
-### Usage
+This paper follows a **living document** approach, with periodic upgrades that extend the theoretical framework while preserving backward compatibility with the published version.
 
-```bash
-cd toolkit
-python demo_scrna.py           # Analyze synthetic data
-python demo_scrna.py --dataset pbmc3k  # Real data (requires scanpy)
-python demo_lorenz.py          # Shadow box demonstration
-```
+### v1.0 (October 2025)
+- Published in BioSystems
+- Core arguments: dimensional projection, sub-Landauer domain, stochastic resonance
+- DOI: [10.1016/j.biosystems.2025.105608](https://doi.org/10.1016/j.biosystems.2025.105608)
 
-### Reproduce Paper Figures
+### v2.0 (December 2025)
+- **New section: Framework Dependence** - The deepest limitation
+- Extended Duhem-Quine thesis: framework choice is itself a projection
+- Wigner's "unreasonable effectiveness" reframed as selection bias
+- Three levels of limitation: physical, dimensional, and axiomatic
+- New figures visualizing framework projection and selection bias
+- Available in: `v2.0/` folder
 
-```bash
-cd toolkit
-python generate_figures.py     # Regenerates all figures into ../figures/
-pytest tests/                  # Run tests (optional)
-```
-
----
-
-## What This Is
-
-This repository contains:
-
-| Component | Description |
-|-----------|-------------|
-| **Paper 1** | "The Limits of Falsifiability" — BioSystems 258, 105608 (published) |
-| **Paper 2** | "The Geometry of Biological Shadows" — computational companion (submitted) |
-| **Toolkit** | Clean Python library for measuring topological aliasing |
-
-**The core finding:** When you project scRNA-seq data (D_sys ≈ 10-40) into t-SNE/UMAP (D_obs = 2), approximately **75.5% of apparent neighbors are wrong**. The clusters you see are partially hallucinated. This was validated across 4 standard datasets (n = 90,300 cells total).
-
----
+**Why version papers?** AI-assisted research tools enable rapid theoretical development. Rather than waiting for formal publication cycles, we release upgraded versions that extend and refine the arguments. Each version is self-contained and citable. The published version remains the canonical reference for formal citation.
 
 ## Repository Structure
 
 ```
-limits-of-falsifiability/
-├── toolkit/                    # ← START HERE
-│   ├── falsifiability.py       # Complete library (~600 lines)
-│   ├── generate_figures.py     # Reproduce paper figures
-│   ├── demo_lorenz.py          # Shadow box: topological aliasing
-│   ├── demo_scrna.py           # scRNA-seq aliasing analysis
-│   ├── demo_regime.py          # Popper vs Ensemble regimes
-│   ├── demo_memory.py          # Non-ergodic memory
-│   ├── setup.py                # pip install .
-│   └── README.md               # API documentation
-│
-├── paper2/                     # Paper 2 source files
-│   └── paper2_shadow_geometry.tex
-│
-├── biosystems_2025_published.pdf   # Paper 1 (published)
-├── paper2_shadow_geometry.pdf      # Paper 2 (submitted)
-├── figures/                        # Generated figures
-└── LICENSE
+1_falsifiability/
+├── figures/                    # v1.0 paper figures
+├── submission_package/         # Final v1.0 submission materials
+├── archive/                    # Archived companion materials
+├── v2.0/                       # Version 2.0 (December 2025)
+│   ├── falsifiability_v2.tex   # Upgraded manuscript
+│   ├── falsifiability_v2.pdf   # Compiled PDF
+│   └── figures/                # New figures + generation scripts
+└── README.md
 ```
 
----
+## Key Arguments
 
-## The Argument
+### v1.0 (Published)
+1. **Dimensional Projection Loss**: Binary tests on high-D systems preserve ~0% of information
+2. **Sub-Landauer Domain**: Many biological patterns exist below measurement thresholds
+3. **Stochastic Resonance**: Weak signals detectable only through population-level pooling
 
-### The Problem
-
-Computational biology routinely:
-1. Projects 10,000+ dimensional gene expression into 2D
-2. Draws cluster boundaries
-3. Calls them "cell types"
-4. Makes biological claims
-
-### What We Show
-
-When D_sys >> D_obs:
-- **75.5% of neighbors are wrong** (topological aliasing)
-- **~40% of cluster assignments are wrong** (cluster aliasing)
-- **<0.001% of state space is sampled** (coverage collapse)
-
-This isn't a bug in t-SNE/UMAP. It's geometry.
-
-### The Solution
-
-**Think like cosmologists**: Accept fundamental observational limits and build epistemology around them, rather than pretending the shadow is the territory.
-
----
-
-## Key Metrics
-
-| Metric | What It Measures | Typical Value |
-|--------|------------------|---------------|
-| **D_sys** | Intrinsic dimensionality (participation ratio) | 10-40 for scRNA-seq |
-| **Aliasing** | Fraction of 2D neighbors that weren't high-D neighbors | 66-83% |
-| **Coverage** | Fraction of high-D space sampled | <0.001% |
-
----
-
-## The Falsifiability Regimes
-
-Binary hypothesis testing (Popperian falsification) works in some regimes but fails in others:
-
-| Regime | Dimensionality | Signal | Method |
-|--------|----------------|--------|--------|
-| **Popper** (green) | Low (n < 10) | High | Single binary tests work |
-| **Ensemble** (red) | High (n > 10) | Low | Only multivariate methods work |
-
-**Most of biology (scRNA-seq, neuroscience, ecology) operates in the Ensemble regime.** The red badge on this repo indicates that the methods described here are designed for high-dimensional biological systems where classical falsification is geometrically incoherent.
-
----
+### v2.0 (Extended)
+4. **Framework Dependence**: Before any measurement, axiomatic choices have already made a dimensional reduction
+5. **Mathematics as Projection**: All math is finite-dimensional; every equation is a shadow of high-D reality
+6. **Wigner Selection Bias**: Physics "works" because we study domains where projection loss is small
 
 ## Citation
 
-**Paper 1 (Theory):**
+For the published version:
 ```bibtex
 @article{todd2025limits,
   title={The limits of falsifiability},
@@ -142,27 +71,23 @@ Binary hypothesis testing (Popperian falsification) works in some regimes but fa
 }
 ```
 
-**Paper 2 + Toolkit (This Repository):**
+For the extended version (v2.0):
 ```bibtex
-@software{todd2025falsifiability,
-  title={Falsifiability Toolkit: Quantifying Topological Aliasing},
+@misc{todd2025limitsv2,
+  title={The Limits of Falsifiability: Dimensionality, Measurement Thresholds, and the Sub-Landauer Domain in Biological Systems (Version 2.0)},
   author={Todd, Ian},
   year={2025},
-  publisher={Zenodo},
-  doi={10.5281/zenodo.17791874},
-  url={https://github.com/todd866/limits-of-falsifiability}
+  note={Extended version available at: https://github.com/todd866/limits-of-falsifiability}
 }
 ```
 
----
+## Author
+
+Ian Todd
+Sydney Medical School, University of Sydney
+itod2305@uni.sydney.edu.au
+ORCID: [0009-0002-6994-0917](https://orcid.org/0009-0002-6994-0917)
 
 ## License
 
-Code: MIT
-Papers: CC-BY
-
----
-
-## Author
-
-Ian Todd, University of Sydney
+MIT
