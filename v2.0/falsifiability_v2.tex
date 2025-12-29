@@ -44,7 +44,7 @@ This paper identifies three distinct levels at which falsifiability breaks down:
 \begin{enumerate}
 \item \textbf{Physical measurement limits.} The Landauer principle establishes that recording one bit of information requires a minimum energy of $k_B T \ln 2$ \cite{landauer1961}. Many biological patterns exist below this threshold---causally potent yet unmeasurable as discrete states.
 
-\item \textbf{Dimensional projection loss.} High-dimensional systems projected onto low-dimensional observations lose almost all information. A binary test on a 100-neuron circuit preserves approximately $10^{-100}$ of the information content.
+\item \textbf{Dimensional projection loss.} High-dimensional systems projected onto low-dimensional observations lose almost all information. A binary test on a 100-neuron circuit preserves less than 1\% of the information content.
 
 \item \textbf{Framework dependence.} Before any measurement occurs, the choice of what counts as a test, what counts as evidence, and how the question is structured already embeds unfalsifiable assumptions. The framework is itself a projection.
 \end{enumerate}
@@ -132,14 +132,19 @@ Consider a hypothesis about protein folding: ``Protein X folds via pathway Y.'' 
 
 \subsection{Information Loss Under Projection}
 
-For a biological system with $n$ degrees of freedom, each with $k$ distinguishable states, the total number of microstates is $\Omega = k^n$. A binary projection captures at most one yes/no partition of this space, yielding a state-space fraction:
+For a biological system with $n$ degrees of freedom, each with $k$ distinguishable states, the total information content is:
 \begin{equation}
-\frac{\Omega_{\text{preserved}}}{\Omega_{\text{total}}} = \frac{1}{k^n}
+I_{\text{total}} = \log_2(k^n) = n \log_2 k \quad \text{bits}
 \end{equation}
 
-In a modest neural circuit with $n = 100$ neurons, each with just $k = 10$ distinguishable states, this ratio becomes $10^{-100}$---essentially zero information preserved. The choice $k=10$ and $n=100$ is intentionally conservative; real biological degrees of freedom typically imply far larger effective $k$ and $n$, further shrinking the fraction preserved by any single binary partition.
+A binary test extracts exactly 1 bit---a yes/no partition of the state space. The fraction of information preserved is therefore:
+\begin{equation}
+\frac{I_{\text{preserved}}}{I_{\text{total}}} = \frac{1}{n \log_2 k}
+\end{equation}
 
-This is not a practical limitation awaiting better technology. It is a geometric fact about projection. The binary test is a shadow of the high-dimensional process, and the shadow preserves almost nothing of the original structure.
+In a modest neural circuit with $n = 100$ neurons, each with $k = 10$ distinguishable states, this ratio becomes $1/(100 \times 3.32) \approx 0.003$---less than 1\% of the information preserved. A single binary test discards over 99\% of the system's information content.
+
+This is not a practical limitation awaiting better technology. It is an information-theoretic fact about projection. Moreover, the situation compounds: to fully specify the system state would require $n \log_2 k \approx 332$ independent binary tests, each of which may perturb the system. The measurement problem is not just that individual tests are lossy, but that the number of tests required scales with system complexity while biological systems cannot tolerate arbitrary repeated measurement.
 
 \section{Three Axes of Measurement Limitation}
 \label{sec:three_axes}
@@ -165,14 +170,16 @@ At physiological temperature ($T \approx 310\,\mathrm{K}$), the Landauer limit f
 E_{\text{Landauer}} = k_B T \ln 2 \approx 3.0 \times 10^{-21} \text{ J}
 \end{equation}
 
-ATP hydrolysis releases approximately $5 \times 10^{-20}\,\mathrm{J}$, only 17 times the Landauer limit. Many biological signals operate near or below this fundamental limit. Sub-threshold membrane fluctuations, protein conformational vibrations, and weak molecular interactions fall in this regime, where they cannot be measured as binary facts without energy injection that fundamentally alters the system.
+Strictly, Landauer's principle concerns the thermodynamic cost of \emph{erasing} information, not detecting it. However, any measurement that produces a reusable, communicable result must eventually involve erasure---resetting the measurement apparatus for subsequent use. The deeper issue is \emph{timing inaccessibility}: even if detection were thermodynamically free, specifying \emph{when} to measure in a chaotic system requires information that cannot be obtained without perturbing the dynamics \cite{todd2025timing}.
+
+ATP hydrolysis releases approximately $5 \times 10^{-20}\,\mathrm{J}$, only 17 times the Landauer limit. Many biological signals operate near or below this fundamental limit. Sub-threshold membrane fluctuations, protein conformational vibrations, and weak molecular interactions fall in this regime, where reliable binary readout becomes physically constrained.
 
 These three axes---dimensionality, quantum disturbance, and energetic erasure---often compound: high-dimensional biological systems operating near thermodynamic limits with quantum-like coherence represent the regime where falsifiability breaks down most completely.
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{figures/fig_three_levels.pdf}
-\caption{\textbf{Three Levels of Limitation.} Left: Physical measurement limits---many biological signals exist below the Landauer threshold for irreversible bit recording. Center: Dimensional projection loss---a binary test on a 100-neuron circuit preserves approximately $10^{-100}$ of the information content. Right: Framework dependence---axiomatic choices about what counts as evidence precede all measurement and cannot be tested from within the framework.}
+\caption{\textbf{Three Levels of Limitation.} Left: Physical measurement limits---many biological signals exist below the Landauer threshold for irreversible bit recording. Center: Dimensional projection loss---a binary test on a 100-neuron circuit preserves less than 1\% of the information content. Right: Framework dependence---axiomatic choices about what counts as evidence precede all measurement and cannot be tested from within the framework.}
 \label{fig:three_levels}
 \end{figure}
 
@@ -409,6 +416,9 @@ Louie, A.H. (2020). Relational biology and Church's thesis. \textit{BioSystems},
 
 \bibitem{pinotsis2023}
 Pinotsis, D.A., et al. (2023). Cytoelectric coupling: Electric fields sculpt neural activity and ``tune'' the brain's infrastructure. \textit{Prog. Neurobiol.}, 226, 102465.
+
+\bibitem{todd2025timing}
+Todd, I. (2025). Timing inaccessibility and the projection bound: Resolving Maxwell's demon for continuous biological substrates. \textit{BioSystems}, 258, 105632. \url{https://doi.org/10.1016/j.biosystems.2025.105632}
 
 \end{thebibliography}
 

@@ -160,27 +160,30 @@ def create_three_levels_figure():
                   fontsize=11, fontweight='bold', pad=15)
     ax1.legend(loc='upper right', fontsize=9, framealpha=0.9)
 
-    # Level 2: Dimensional projection
+    # Level 2: Dimensional projection (CORRECTED MATH)
     ax2 = axes[1]
-    dims = np.array([1, 10, 100, 1000])
-    info_lost = dims  # Orders of magnitude lost
+    dims = np.array([10, 50, 100, 500, 1000])
+    k = 10  # states per degree of freedom
+    # Information preserved = 1 / (n * log2(k))
+    info_preserved_pct = 100 / (dims * np.log2(k))  # as percentage
 
-    bars = ax2.bar(range(len(dims)), info_lost, color='#457B9D', alpha=0.8, width=0.6)
+    bars = ax2.bar(range(len(dims)), info_preserved_pct, color='#457B9D', alpha=0.8, width=0.6)
     ax2.set_xticks(range(len(dims)))
     ax2.set_xticklabels([f'n={d}' for d in dims], fontsize=10)
-    ax2.set_ylabel('Information lost\n(orders of magnitude)', fontsize=11)
-    ax2.set_xlabel('System dimension', fontsize=11)
-    ax2.set_title('Level 2: DIMENSIONAL PROJECTION\nBinary tests destroy information',
+    ax2.set_ylabel('Information preserved\nby binary test (%)', fontsize=11)
+    ax2.set_xlabel('System dimension (k=10 states each)', fontsize=11)
+    ax2.set_title('Level 2: DIMENSIONAL PROJECTION\nBinary tests preserve <1% of information',
                   fontsize=11, fontweight='bold', pad=15)
 
-    # Cleaner annotation
-    ax2.annotate('100 neurons:\n$10^{-100}$ preserved',
-                 xy=(2, 100), xytext=(2.8, 500),
+    # Annotation showing the math
+    ax2.annotate('100 neurons:\n~0.3% preserved\n(99.7% lost)',
+                 xy=(2, info_preserved_pct[2]), xytext=(3.2, 1.5),
                  arrowprops=dict(arrowstyle='->', color='#E63946', lw=1.5),
-                 fontsize=10, color='#E63946', fontweight='bold',
+                 fontsize=9, color='#E63946', fontweight='bold',
                  bbox=dict(boxstyle='round,pad=0.3', facecolor='white', edgecolor='#E63946'))
 
-    ax2.set_ylim(0, 1100)
+    ax2.set_ylim(0, 4)
+    ax2.axhline(y=1, color='#E63946', linestyle='--', alpha=0.5, label='1% threshold')
 
     # Level 3: Framework dependence
     ax3 = axes[2]
