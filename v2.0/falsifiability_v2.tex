@@ -211,6 +211,12 @@ We define the sub-Landauer domain as the space of biological patterns whose ener
 
 \paragraph{Ephaptic coupling.} Endogenous electric fields as weak as 1 mV/mm---well below single neuron detection thresholds---can shift spike timing by several milliseconds across neural populations \cite{anastassiou2011,chiang2019}. These fields represent information-carrying patterns that operate below the Landauer limit yet causally influence network dynamics.
 
+\textbf{Quantitative estimate.} Consider a voltage-gated ion channel---the fundamental ``decision unit'' of neuronal excitability---responding to an ephaptic field. At body temperature ($T \approx 310$ K), the Landauer limit is $E_{\text{Landauer}} = k_B T \ln 2 \approx 3.0 \times 10^{-21}$ J. An extracellular field of 1 mV/mm induces transmembrane polarization of approximately $\Delta V \approx 0.1$ mV. The voltage sensor of a typical Na$^+$ or K$^+$ channel has effective gating charge $q \approx 4e$ (where $e = 1.6 \times 10^{-19}$ C). The work done by the ephaptic perturbation on this gating charge is:
+\begin{equation}
+W = q \Delta V \approx (4 \times 1.6 \times 10^{-19}\,\text{C})(10^{-4}\,\text{V}) \approx 6.4 \times 10^{-23}\,\text{J}
+\end{equation}
+This is approximately \textbf{2\% of the Landauer limit}. A binary detector at the single-channel level would read only thermal noise. Yet these fields successfully entrain network activity because collective integration across $N$ channels lowers the effective threshold by $\sqrt{N}$---the signature of stochastic resonance operating in the sub-Landauer regime.
+
 \paragraph{Stochastic resonance.} Weak periodic signals below individual neuron thresholds can entrain population activity through noise-mediated synchronization \cite{mcdonnell2011,stocks2000}. The effective detection threshold drops as $E_{\text{threshold}}/\sqrt{N}$ for $N$ coupled units, rendering sub-threshold drives decisive at the population level despite being individually unmeasurable.
 
 \subsection{Collective Computation Through Stochastic Resonance}
