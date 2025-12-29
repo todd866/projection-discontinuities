@@ -229,68 +229,71 @@ def create_three_levels_figure():
 def create_wigner_selection_figure():
     """Create figure illustrating Wigner selection bias."""
 
-    fig, ax = plt.subplots(figsize=(11, 8))
+    fig, ax = plt.subplots(figsize=(12, 8))
 
     np.random.seed(42)
-    n_domains = 150
+    n_domains = 100  # Fewer points for cleaner look
 
-    projection_loss = np.random.exponential(1, n_domains)
-    physics_prob = np.exp(-projection_loss * 2)
+    projection_loss = np.random.exponential(1.2, n_domains)
+    physics_prob = np.exp(-projection_loss * 1.5)
     studied_by_physics = np.random.random(n_domains) < physics_prob
     math_success = 1 / (1 + projection_loss)
 
-    # Plot scatter
-    ax.scatter(projection_loss[~studied_by_physics],
+    # Plot scatter - shift physics points right slightly to make room for labels
+    ax.scatter(projection_loss[~studied_by_physics] + 0.3,
                math_success[~studied_by_physics],
                c='#CCCCCC', s=40, alpha=0.4, label='Not studied by physics')
-    ax.scatter(projection_loss[studied_by_physics],
+    ax.scatter(projection_loss[studied_by_physics] + 0.3,
                math_success[studied_by_physics],
                c='#2A9D8F', s=80, alpha=0.7, label='Studied by physics')
 
-    # Cleaner domain labels with better positioning
-    domains_physics = [
-        (0.1, 0.92, 'Particle physics'),
-        (0.25, 0.82, 'Mechanics'),
-        (0.4, 0.72, 'E&M'),
+    # Physics domain labels - use arrows pointing to the cluster region
+    physics_labels = [
+        ('Particle\nphysics', (0.5, 0.95)),
+        ('Classical\nmechanics', (0.6, 0.85)),
+        ('Electro-\nmagnetism', (0.7, 0.75)),
     ]
 
-    domains_other = [
-        (0.9, 0.52, 'Fluids'),
-        (1.4, 0.42, 'Mol. biology'),
-        (2.0, 0.33, 'Ecology'),
-        (2.5, 0.28, 'Consciousness'),
-        (3.2, 0.22, 'Social systems'),
-    ]
-
-    for x, y, label in domains_physics:
+    for label, (x, y) in physics_labels:
         ax.annotate(label, (x, y), fontsize=9, ha='center', color='#2A9D8F',
-                   fontweight='bold')
+                   fontweight='bold',
+                   bbox=dict(boxstyle='round,pad=0.2', facecolor='white',
+                            edgecolor='#2A9D8F', alpha=0.8))
 
-    for x, y, label in domains_other:
-        ax.annotate(label, (x, y), fontsize=9, ha='center', color='#666666')
+    # Other domain labels - positioned to avoid data points
+    other_labels = [
+        ('Fluids', (1.3, 0.48)),
+        ('Molecular\nbiology', (1.8, 0.38)),
+        ('Ecology', (2.4, 0.30)),
+        ('Consciousness', (3.0, 0.24)),
+        ('Social\nsystems', (3.6, 0.20)),
+    ]
+
+    for label, (x, y) in other_labels:
+        ax.annotate(label, (x, y), fontsize=9, ha='center', color='#555555')
 
     # Selection zone
-    ax.axvline(x=0.7, color='#E63946', linestyle='--', linewidth=2)
-    ax.fill_betweenx([0, 1], 0, 0.7, alpha=0.08, color='#2A9D8F')
+    ax.axvline(x=1.0, color='#E63946', linestyle='--', linewidth=2)
+    ax.fill_betweenx([0, 1.1], 0, 1.0, alpha=0.08, color='#2A9D8F')
 
     ax.set_xlabel('Projection Loss (D_sys >> D_math)', fontsize=12)
     ax.set_ylabel('Success of Mathematical Description', fontsize=12)
     ax.set_title("Wigner's 'Unreasonable Effectiveness' as Selection Bias",
                  fontsize=13, fontweight='bold', pad=15)
     ax.legend(loc='upper right', fontsize=10, framealpha=0.9)
-    ax.set_xlim(-0.1, 4)
-    ax.set_ylim(0, 1.05)
+    ax.set_xlim(0, 4.2)
+    ax.set_ylim(0, 1.08)
 
-    # Two annotation boxes with clear separation
-    ax.text(0.35, 0.18, 'Physics selects for\nlow projection loss',
+    # Annotation boxes
+    ax.text(0.5, 0.25, 'Physics selects for\nlow projection loss',
             fontsize=10, ha='center', color='#2A9D8F', fontweight='bold',
             bbox=dict(boxstyle='round,pad=0.4', facecolor='white',
                      edgecolor='#2A9D8F', alpha=0.9))
 
-    ax.text(2.8, 0.55, 'Biology lives here:\nhigh D_sys, low D_obs',
-            fontsize=10, ha='center', color='#666666',
+    ax.text(3.0, 0.55, 'Biology lives here:\nhigh D_sys, low D_obs',
+            fontsize=10, ha='center', color='#555555',
             bbox=dict(boxstyle='round,pad=0.4', facecolor='white',
-                     edgecolor='#666666', alpha=0.9))
+                     edgecolor='#555555', alpha=0.9))
 
     plt.tight_layout()
     plt.savefig('fig_wigner_selection.pdf', dpi=150, bbox_inches='tight')
