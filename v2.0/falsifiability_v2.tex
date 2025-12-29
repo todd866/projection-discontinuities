@@ -196,7 +196,51 @@ We define the sub-Landauer domain as the space of biological patterns whose ener
 
 \paragraph{Ephaptic coupling.} Endogenous electric fields as weak as 1 mV/mm---well below single neuron detection thresholds---can shift spike timing by several milliseconds across neural populations \cite{anastassiou2011,chiang2019}. These fields represent information-carrying patterns that operate below the Landauer limit yet causally influence network dynamics.
 
-\paragraph{Stochastic resonance.} Weak periodic signals below individual neuron thresholds can entrain population activity through noise-mediated synchronization \cite{mcdonnell2011}. The effective detection threshold drops as $E_{\text{threshold}}/\sqrt{N}$ for $N$ coupled units, rendering sub-threshold drives decisive at the population level despite being individually unmeasurable.
+\paragraph{Stochastic resonance.} Weak periodic signals below individual neuron thresholds can entrain population activity through noise-mediated synchronization \cite{mcdonnell2011,stocks2000}. The effective detection threshold drops as $E_{\text{threshold}}/\sqrt{N}$ for $N$ coupled units, rendering sub-threshold drives decisive at the population level despite being individually unmeasurable.
+
+\subsection{Collective Computation Through Stochastic Resonance}
+
+Biological systems exploit stochastic resonance to amplify sub-Landauer signals. In neural populations, weak periodic signals below individual neuron thresholds can entrain population activity through noise-mediated synchronization \cite{gammaitoni1998}. The mechanism requires:
+\begin{equation}
+E_{\text{signal}} + E_{\text{noise}} > E_{\text{threshold}}
+\end{equation}
+where individually $E_{\text{signal}} < E_{\text{Landauer}}$ but collectively the signal emerges through correlation across many units.
+
+Let $s(t)$ be a weak periodic drive with per-unit energy $E_{\text{signal}}<E_{\text{Landauer}}$ and independent noise $\eta_i(t)$ at units $i\in\{1,\dots,N\}$. For $Y(t)=\frac{1}{N}\sum_i y_i(t)$ with $y_i$ a thresholded response,
+\begin{equation}
+\mathrm{SNR}(Y)\approx \frac{N\,\mathrm{cov}(y_i,s)}{\sqrt{N\,\mathrm{var}(y_i)}}\propto \sqrt{N}
+\end{equation}
+so the effective detection threshold scales as $E_{\text{threshold}}/\sqrt{N}$. This is suprathreshold stochastic resonance \cite{stocks2000}, observed in sensory systems and neural arrays \cite{jaramillo1998,patel2011}.
+
+The key insight is that sub-Landauer patterns are \textit{decisive} for biological function precisely because they operate at criticality---the boundary between noise and signal.
+
+\section{Analytical Bounds on Predictability}
+\label{sec:analytical_bounds}
+
+\subsection{The Specification Horizon}
+
+To formalize the limits on complete system specification, consider a biological dynamical system with $n$ coupled degrees of freedom, maximum Lyapunov exponent $\lambda$, and quantum uncertainty $\Delta x_i \geq \hbar/(2\Delta p_i)$ in each coordinate. The predictability horizon $T_{\text{pred}}$ for deterministic specification is bounded by:
+\begin{equation}
+T_{\text{pred}} \lesssim \frac{1}{\lambda} \ln\left(\frac{L}{\Delta x}\right)
+\end{equation}
+where $L$ is the system size and $\Delta x$ is the measurement precision. This is an \textit{in-principle} bound: no improvement in measurement technology can extend specification beyond this horizon without fundamentally altering the system dynamics.
+
+\subsection{Information-Theoretic Requirement}
+
+For $n$ effective degrees of freedom resolved to precision $\Delta x$ over a domain of size $L$, the binary information required for full specification scales as:
+\begin{equation}
+I_{\text{required}} \sim \frac{n}{\ln 2} \ln\left(\frac{L}{\Delta x}\right) \quad \text{bits}
+\end{equation}
+
+When $I_{\text{required}}$ exceeds the maximum extractable information without destroying function, single-trial binary falsification becomes incoherent; only ensemble fingerprints remain accessible. This formalism shows that computational irreducibility \cite{azadi2025} is not merely a practical limitation but follows from fundamental physical constraints.
+
+\section{Emergent Properties and Collective Phenomena}
+
+Biological systems exhibit emergent properties that exist only at the collective level. Swarming behavior in bacteria emerges from quorum sensing---a phenomenon where individual cells respond to population density through diffusible signals \cite{waters2005}. The swarm's properties cannot be reduced to binary statements about individual cells.
+
+Similarly, consciousness appears to emerge from integrated information across brain regions \cite{tononi2016}. Attempts to falsify theories of consciousness through binary tests necessarily destroy the integration that defines the phenomenon.
+
+Evolution operates in fitness landscapes of enormous dimensionality. A single protein's fitness depends on its interactions with thousands of other molecules, environmental conditions, and evolutionary history. Wright's adaptive landscape metaphor \cite{wright1932}, while useful, dramatically understates the true dimensionality---real fitness landscapes may have millions of dimensions.
 
 \section{Epistemological Implications}
 
@@ -329,6 +373,42 @@ Chiang, C.C., et al. (2019). Slow periodic activity in the longitudinal hippocam
 
 \bibitem{tononi2016}
 Tononi, G., et al. (2016). Integrated information theory: from consciousness to its physical substrate. \textit{Nat. Rev. Neurosci.}, 17(7), 450--461.
+
+\bibitem{stocks2000}
+Stocks, N. (2000). Suprathreshold stochastic resonance in multilevel threshold systems. \textit{Phys. Rev. Lett.}, 84(11), 2310--2313.
+
+\bibitem{gammaitoni1998}
+Gammaitoni, L., et al. (1998). Stochastic resonance. \textit{Rev. Mod. Phys.}, 70(1), 223--287.
+
+\bibitem{jaramillo1998}
+Jaramillo, F., Wiesenfeld, K. (1998). Mechanoelectrical transduction assisted by Brownian motion. \textit{Nat. Neurosci.}, 1(5), 384--388.
+
+\bibitem{patel2011}
+Patel, A., Kosko, B. (2011). Noise benefits in quantizer-array correlation detection. \textit{IEEE Trans. Signal Process.}, 59(2), 488--501.
+
+\bibitem{azadi2025}
+Azadi, P. (2025). Computational irreducibility as the foundation of agency. \textit{BioSystems}, 256, 105563.
+
+\bibitem{waters2005}
+Waters, C.M., Bassler, B.L. (2005). Quorum sensing: cell-to-cell communication in bacteria. \textit{Annu. Rev. Cell Dev. Biol.}, 21, 319--346.
+
+\bibitem{wright1932}
+Wright, S. (1932). The roles of mutation, inbreeding, crossbreeding and selection in evolution. \textit{Proc. Sixth Int. Congr. Genet.}, 1, 356--366.
+
+\bibitem{stringer2019}
+Stringer, C., et al. (2019). Spontaneous behaviors drive multidimensional, brainwide activity. \textit{Science}, 364(6437), eaav7893.
+
+\bibitem{gallego2020}
+Gallego, J.A., et al. (2020). Long-term stability of cortical population dynamics underlying consistent behavior. \textit{Nat. Neurosci.}, 23(2), 260--270.
+
+\bibitem{igamberdiev2021}
+Igamberdiev, A.U., Brenner, J.E. (2021). Mathematics in biological reality: The emergence of natural computation in living systems. \textit{BioSystems}, 204, 104395.
+
+\bibitem{louie2020}
+Louie, A.H. (2020). Relational biology and Church's thesis. \textit{BioSystems}, 197, 104179.
+
+\bibitem{pinotsis2023}
+Pinotsis, D.A., et al. (2023). Cytoelectric coupling: Electric fields sculpt neural activity and ``tune'' the brain's infrastructure. \textit{Prog. Neurobiol.}, 226, 102465.
 
 \end{thebibliography}
 
