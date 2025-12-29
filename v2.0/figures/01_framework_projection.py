@@ -230,70 +230,74 @@ def create_three_levels_figure():
 
 
 def create_wigner_selection_figure():
-    """Create figure illustrating Wigner selection bias."""
+    """Create figure illustrating Wigner selection bias.
+
+    NOTE: This is a SCHEMATIC/HEURISTIC visualization. The key domain
+    positions are hard-coded to ensure they always appear where the
+    theory predicts, regardless of random background scatter.
+    """
 
     fig, ax = plt.subplots(figsize=(12, 8))
 
     np.random.seed(42)
-    n_domains = 100  # Fewer points for cleaner look
 
-    projection_loss = np.random.exponential(1.2, n_domains)
-    physics_prob = np.exp(-projection_loss * 1.5)
-    studied_by_physics = np.random.random(n_domains) < physics_prob
-    math_success = 1 / (1 + projection_loss)
-
-    # Plot scatter - shift physics points right slightly to make room for labels
-    ax.scatter(projection_loss[~studied_by_physics] + 0.3,
-               math_success[~studied_by_physics],
-               c='#CCCCCC', s=40, alpha=0.4, label='Not studied by physics')
-    ax.scatter(projection_loss[studied_by_physics] + 0.3,
-               math_success[studied_by_physics],
-               c='#2A9D8F', s=80, alpha=0.7, label='Studied by physics')
-
-    # Physics domain labels - use arrows pointing to the cluster region
-    physics_labels = [
-        ('Particle\nphysics', (0.5, 0.95)),
-        ('Classical\nmechanics', (0.6, 0.85)),
-        ('Electro-\nmagnetism', (0.7, 0.75)),
+    # HARD-CODED key domain positions (these anchor the argument)
+    # Format: (projection_loss, math_success, label, is_physics)
+    key_domains = [
+        (0.15, 0.87, 'Particle\nphysics', True),
+        (0.25, 0.80, 'Classical\nmechanics', True),
+        (0.35, 0.74, 'Electro-\nmagnetism', True),
+        (0.55, 0.65, 'Thermo-\ndynamics', True),
+        (1.0, 0.50, 'Fluid\ndynamics', True),
+        (1.5, 0.40, 'Molecular\nbiology', False),
+        (2.2, 0.31, 'Ecology', False),
+        (2.8, 0.26, 'Consciousness', False),
+        (3.4, 0.23, 'Social\nsystems', False),
     ]
 
-    for label, (x, y) in physics_labels:
-        ax.annotate(label, (x, y), fontsize=9, ha='center', color='#2A9D8F',
-                   fontweight='bold',
+    # Background scatter (illustrative noise, not specific domains)
+    n_background = 60
+    bg_loss = np.random.exponential(1.5, n_background)
+    bg_success = 1 / (1 + bg_loss) + np.random.normal(0, 0.03, n_background)
+    bg_success = np.clip(bg_success, 0.1, 0.95)
+
+    # Plot background scatter
+    ax.scatter(bg_loss, bg_success, c='#DDDDDD', s=30, alpha=0.3,
+               label='Other domains (illustrative)')
+
+    # Plot and label key domains
+    for pl, ms, label, is_physics in key_domains:
+        color = '#2A9D8F' if is_physics else '#888888'
+        size = 120 if is_physics else 80
+        ax.scatter(pl, ms, c=color, s=size, alpha=0.9, zorder=5,
+                  edgecolor='white', linewidth=1)
+        ax.annotate(label, (pl, ms), fontsize=8, ha='center', va='bottom',
+                   color=color, fontweight='bold' if is_physics else 'normal',
+                   xytext=(0, 8), textcoords='offset points',
                    bbox=dict(boxstyle='round,pad=0.2', facecolor='white',
-                            edgecolor='#2A9D8F', alpha=0.8))
-
-    # Other domain labels - positioned to avoid data points
-    other_labels = [
-        ('Fluids', (1.3, 0.48)),
-        ('Molecular\nbiology', (1.8, 0.38)),
-        ('Ecology', (2.4, 0.30)),
-        ('Consciousness', (3.0, 0.24)),
-        ('Social\nsystems', (3.6, 0.20)),
-    ]
-
-    for label, (x, y) in other_labels:
-        ax.annotate(label, (x, y), fontsize=9, ha='center', color='#555555')
+                            edgecolor=color, alpha=0.85) if is_physics else None)
 
     # Selection zone
-    ax.axvline(x=1.0, color='#E63946', linestyle='--', linewidth=2)
-    ax.fill_betweenx([0, 1.1], 0, 1.0, alpha=0.08, color='#2A9D8F')
+    ax.axvline(x=0.8, color='#E63946', linestyle='--', linewidth=2,
+               label='Informal "physics" boundary')
+    ax.fill_betweenx([0, 1.0], 0, 0.8, alpha=0.06, color='#2A9D8F')
 
     ax.set_xlabel('Projection Loss (D_sys >> D_math)', fontsize=12)
     ax.set_ylabel('Success of Mathematical Description', fontsize=12)
-    ax.set_title("Wigner's 'Unreasonable Effectiveness' as Selection Bias",
-                 fontsize=13, fontweight='bold', pad=15)
-    ax.legend(loc='upper right', fontsize=10, framealpha=0.9)
-    ax.set_xlim(0, 4.2)
-    ax.set_ylim(0, 1.08)
+    ax.set_title("Wigner's 'Unreasonable Effectiveness' as Selection Bias\n"
+                 "(Schematic Representation)",
+                 fontsize=13, fontweight='bold', pad=10)
+    ax.legend(loc='upper right', fontsize=9, framealpha=0.9)
+    ax.set_xlim(0, 4.0)
+    ax.set_ylim(0.15, 0.95)
 
     # Annotation boxes
-    ax.text(0.5, 0.25, 'Physics selects for\nlow projection loss',
+    ax.text(0.4, 0.35, 'Physics selects for\nlow projection loss',
             fontsize=10, ha='center', color='#2A9D8F', fontweight='bold',
             bbox=dict(boxstyle='round,pad=0.4', facecolor='white',
                      edgecolor='#2A9D8F', alpha=0.9))
 
-    ax.text(3.0, 0.55, 'Biology lives here:\nhigh D_sys, low D_obs',
+    ax.text(2.8, 0.50, 'Biology lives here:\nhigh D_sys, low D_obs',
             fontsize=10, ha='center', color='#555555',
             bbox=dict(boxstyle='round,pad=0.4', facecolor='white',
                      edgecolor='#555555', alpha=0.9))

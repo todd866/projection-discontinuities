@@ -64,7 +64,7 @@ Biology is where projection loss becomes undeniable. Living systems maintain hig
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.8\textwidth]{figures/fig_wigner_selection.pdf}
-\caption{\textbf{The ``Unreasonable Effectiveness'' as Selection Bias.} Domains studied by physics (green) cluster where projection loss is small---where finite-dimensional mathematical descriptions capture most of the relevant dynamics. Biology, consciousness, and social systems occupy the high projection-loss regime where mathematical description fails. The apparent success of mathematics in physics reflects selection for tractable domains, not a deep truth about the mathematical nature of reality.}
+\caption{\textbf{The ``Unreasonable Effectiveness'' as Selection Bias (Schematic Representation).} Domains studied by physics (green) cluster where projection loss is small---where finite-dimensional mathematical descriptions capture most of the relevant dynamics. Biology, consciousness, and social systems occupy the high projection-loss regime where mathematical description fails. The apparent success of mathematics in physics reflects selection for tractable domains, not a deep truth about the mathematical nature of reality. \emph{Note: Domain positions are illustrative; no rigorous quantification of ``projection loss'' exists across these diverse fields. The figure visualizes the qualitative argument, not empirical measurements.}}
 \label{fig:wigner}
 \end{figure}
 
@@ -221,6 +221,8 @@ so the effective detection threshold scales as $E_{\text{threshold}}/\sqrt{N}$. 
 
 The key insight is that sub-Landauer patterns are \textit{decisive} for biological function precisely because they operate at criticality---the boundary between noise and signal.
 
+\textbf{Clarification on the ``bit.''} The Landauer limit applies to recording a single bit irreversibly. When we say sub-Landauer signals are ``unmeasurable,'' we mean that no \emph{single} event carries enough energy to flip a reliable detector. But ensembles of such events can be detected: the ``bit'' extracted is a statistical property of the population (e.g., the mean phase), not any individual sub-threshold event. This is precisely how stochastic resonance works---the signal emerges from correlation across many units, none of which individually crosses threshold. The ensemble can be measured; the individual events constituting it cannot.
+
 \section{Analytical Bounds on Predictability}
 \label{sec:analytical_bounds}
 
@@ -313,6 +315,8 @@ Given these limitations, biological sciences require validation methods beyond f
 \end{itemize}
 
 No single approach suffices. Biological validation requires a portfolio of complementary methods that acknowledge framework dependence and scale limitations.
+
+\textbf{Example: Ensemble-based inference in neural coding.} Consider testing whether a neural population encodes a particular stimulus feature. A single-trial binary test (``did neuron $i$ fire?'') preserves almost no information about the population state. But measuring firing rates across many trials, computing cross-correlations, or extracting low-dimensional manifold structure from high-dimensional spike trains---these ensemble methods can reveal coding principles that single-trial falsification cannot access. The ``hypothesis'' is not ``neuron $i$ fires when stimulus $X$ is present'' but rather ``the population trajectory occupies region $R$ of state space with probability $p > p_0$ when $X$ is present.'' This is falsifiable, but only statistically, and only with respect to a framework that defines the relevant state space, the appropriate dimensionality reduction, and the threshold $p_0$. The framework dependence is explicit, not hidden.
 
 \section{Conclusion}
 
